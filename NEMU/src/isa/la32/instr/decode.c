@@ -237,10 +237,10 @@ int isa_fetch_decode(Decode *s) {
 
   if(cpu.pc & ((vaddr_t)0x3)){
     printf("PC: 0x%x [DEBUG]: inst fetch, PC = 0x%x, not 4 aligned\n", cpu.pc, cpu.pc);
-    longjmp_exception(EX_ALE); 
+    longjmp_exception(EX_ADE); 
   }
-  if((CRMD->plv == 0x3) && (cpu.pc & ((vaddr_t)0x80000000))){ 
-    printf("PC: 0x%x [DEBUG]: current PC = 0x%x, user visited high half\n",cpu.pc,cpu.pc);
+  else if((CRMD->plv == 0x3) && (cpu.pc & ((vaddr_t)0x80000000))){ 
+    printf("PC: 0x%x [DEBUG]: current PC = 0x%x, user visited high half\n",cpu.pc, cpu.pc);
     longjmp_exception(EX_ADE); 
   } 
 
