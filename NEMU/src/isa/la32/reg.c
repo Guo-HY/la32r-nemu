@@ -1,7 +1,6 @@
 #include <isa.h>
 #include "local-include/reg.h"
 
-/* copy from isa/mips32 */
 
 const char *regsl[] = {
   "r0", "ra", "tp", "sp", "a0", "a1", "a2", "a3",

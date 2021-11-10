@@ -4,9 +4,6 @@
 #include <cpu/difftest.h>
 
 
-/* do nothing for now.. just for pass compiler */
-
-
 word_t raise_intr(uint32_t ecode, vaddr_t epc) {
   PRMD->pplv = CRMD->plv;
   PRMD->pie  = CRMD->ie;

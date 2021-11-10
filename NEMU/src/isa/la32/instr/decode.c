@@ -6,7 +6,6 @@
 #include <cpu/decode.h>
 #include <isa-all-instr.h>
 
-/* follow codes in isa/mips32/instr/decode.c */
 
 def_all_THelper();
 

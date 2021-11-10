@@ -1,9 +1,6 @@
 #include <cpu/decode.h>
 #include "../local-include/rtl.h"
 
-/* add some very naive instructions first...
- * but idk what's the use of 'nemu_trap', encode as 0x80000000
- */
 
 #define INSTR_NULLARY(f) \
   f(inv) f(nemu_trap) f(print_led) f(ertn) 

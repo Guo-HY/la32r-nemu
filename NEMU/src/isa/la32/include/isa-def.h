@@ -3,8 +3,6 @@
 
 #include <common.h>
 
-/* havent add csr yet */
-
 // reg
 typedef struct {
   struct {

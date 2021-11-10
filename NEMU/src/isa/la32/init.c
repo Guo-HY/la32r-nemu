@@ -2,11 +2,6 @@
 #include <memory/paddr.h>
 #include "local-include/csr.h"
 
-/*** if no .bin is given, nemu will run instructions in img[] *** --from a developer of NEMU 
- *   but when you do it, one assertion will cause <core dumped>
- */
-
-
 //load some inst for test
 static const uint32_t img [] = {
 0x028006f7,// 	addi.w	$r23,$r23,1(0x1)
