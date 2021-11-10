@@ -48,6 +48,7 @@ static int cmd_si(char *args) {
   if (arg == NULL) {
     /* no argument given */
     cpu_exec(1);
+    isa_reg_display();
   }
   else {
     int n = strtol(arg, NULL, 10);

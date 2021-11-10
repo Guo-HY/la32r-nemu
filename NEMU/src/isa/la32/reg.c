@@ -13,10 +13,14 @@ const char *regsl[] = {
 void isa_reg_display() {
   int i;
   for (i = 0; i < 32; i ++) {
-    printf("%s: 0x%08x ", regsl[i], cpu.gpr[i]._32);
+    printf("%s(r%2d): 0x%08x ", regsl[i], i, cpu.gpr[i]._32);
     if (i % 4 == 3) printf("\n");
   }
   printf("pc: 0x%08x\n", cpu.pc);
+  printf("CRMD: 0x%08x,    PRMD: 0x%08x,   EUEN: 0x%08x\n", csr_array[0], csr_array[1], csr_array[2]);
+  printf("ECFG: 0x%08x,   ESTAT: 0x%08x,    ERA: 0x%08x\n", csr_array[4], csr_array[5], csr_array[6]);  
+  printf("BADV: 0x%08x,  EENTRY: 0x%08x, LLBCTL: 0x%08x\n", csr_array[7], csr_array[12], csr_array[96]);    
+  printf("cpu.ll_bit: %d\n",cpu.ll_bit);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {

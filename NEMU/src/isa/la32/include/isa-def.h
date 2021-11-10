@@ -12,7 +12,9 @@ typedef struct {
   } gpr[32];
 
   vaddr_t pc;
-
+  rtlreg_t ll_bit;
+  
+  bool inst_idle;
   bool INTR;
   bool guided_exec;
 
@@ -25,7 +27,7 @@ typedef struct {
       uint32_t rd     :  5;
       uint32_t rj     :  5;
       uint32_t opcode :  22;
-    } r2;     
+    } r2;     // ertn tlbxx
     struct {
       uint32_t rd     :  5;
       uint32_t rj     :  5;
@@ -64,7 +66,13 @@ typedef struct {
       uint32_t rj     : 5;
       uint32_t i14    : 14;
       uint32_t opcode : 8;
-    } r2_i14; //ll sc
+    } r2_i14; // csr
+    struct {
+      uint32_t rd     : 5;
+      uint32_t rj     : 5;
+      int32_t i14     : 14;
+      uint32_t opcode : 8;
+    } r2_i14s; // llsc    
     struct {
       uint32_t rd     : 5;
       uint32_t rj     : 5;
@@ -87,6 +95,10 @@ typedef struct {
       uint32_t i26_15_0    : 16;
       uint32_t opcode      : 6;
     } i_26;   //b bl
+    struct {
+      uint32_t code        :15;
+      uint32_t opcode      :17;
+    } code_15; // syscall break idle
 
     uint32_t val;
   } instr;
