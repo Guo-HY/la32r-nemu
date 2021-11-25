@@ -5,8 +5,6 @@
 
 /* copy from isa/mips32 */
 
-// enum { PRIV_ERET, PRIV_TLBWR, PRIV_TLBWI, PRIV_TLBP };
-
 static inline int check_reg_index(int index) {
   IFDEF(CONFIG_RT_CHECK, assert(index >= 0 && index < 32));
   return index;

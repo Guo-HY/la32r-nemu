@@ -45,24 +45,18 @@ static word_t vaddr_mmu_read(struct Decode *s, vaddr_t addr, int len, int type) 
 #ifdef XIANGSHAN_DEBUG
   vaddr_t vaddr = addr;
 #endif
-  paddr_t pg_base = isa_mmu_translate(addr, len, type);
-  int ret = pg_base & PAGE_MASK;
-  if (ret == MEM_RET_OK) {
-    addr = pg_base | (addr & PAGE_MASK);
+  paddr_t paddr = isa_mmu_translate(addr, len, type);
+
 #ifdef CONFIG_MULTICORE_DIFF
-    word_t rdata = (type == MEM_TYPE_IFETCH ? golden_pmem_read : paddr_read)(addr, len);
+  word_t rdata = (type == MEM_TYPE_IFETCH ? golden_pmem_read : paddr_read)(addr, len);
 #else
-    word_t rdata = paddr_read(addr, len);
+  word_t rdata = paddr_read(paddr, len);
 #endif
 #ifdef XIANGSHAN_DEBUG
-    printf("[NEMU] mmu_read: vaddr 0x%lx, paddr 0x%lx, rdata 0x%lx\n",
-      vaddr, addr, rdata);
+  printf("[NEMU] mmu_read: vaddr 0x%lx, paddr 0x%lx, rdata 0x%lx\n",
+    vaddr, addr, rdata);
 #endif
-    return rdata;
-  } else if (len != 1 && ret == MEM_RET_CROSS_PAGE) {
-    return vaddr_read_cross_page(addr, len, type);
-  }
-  return 0;
+  return rdata;
 }
 
 __attribute__((noinline))
@@ -70,18 +64,13 @@ static void vaddr_mmu_write(struct Decode *s, vaddr_t addr, int len, word_t data
 #ifdef XIANGSHAN_DEBUG
   vaddr_t vaddr = addr;
 #endif
-  paddr_t pg_base = isa_mmu_translate(addr, len, MEM_TYPE_WRITE);
-  int ret = pg_base & PAGE_MASK;
-  if (ret == MEM_RET_OK) {
-    addr = pg_base | (addr & PAGE_MASK);
+  paddr_t paddr = isa_mmu_translate(addr, len, MEM_TYPE_WRITE);
+
 #ifdef XIANGSHAN_DEBUG
-    printf("[NEMU] mmu_write: vaddr 0x%lx, paddr 0x%lx, len %d, data 0x%lx\n",
-      vaddr, addr, len, data);
+  printf("[NEMU] mmu_write: vaddr 0x%lx, paddr 0x%lx, len %d, data 0x%lx\n",
+    vaddr, addr, len, data);
 #endif
-    paddr_write(addr, len, data);
-  } else if (len != 1 && ret == MEM_RET_CROSS_PAGE) {
-    vaddr_write_cross_page(addr, len, data);
-  }
+  paddr_write(paddr, len, data);
 }
 #endif
 #endif

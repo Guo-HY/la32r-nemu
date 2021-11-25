@@ -1,9 +1,11 @@
 #include "../local-include/csr.h"
 #include "../local-include/rtl.h"
 #include "../local-include/intr.h"
+#include "../local-include/mmu.h"
 #include "csr_mask.h"
 #include <cpu/difftest.h>
 #include <cpu/cpu.h>
+#include <stdlib.h>
 
 rtlreg_t csr_array[4096] = {};
 
@@ -88,7 +90,7 @@ static inline void csr_write(word_t *dest, word_t src) {
       LLBCTL->val = mask_bitset(LLBCTL->val, LLBCTL_W_MASK, src);
   }
   else if(is_write(TLBIDX)){
-      TLBIDX->val = mask_bitset(TLBIDX->val, TLBELO_W_MASK, src);
+      TLBIDX->val = mask_bitset(TLBIDX->val, TLBIDX_W_MASK, src);
   }
   else if(is_write(TLBEHI)){
       TLBEHI->val = mask_bitset(TLBEHI->val, TLBEHI_W_MASK, src);
@@ -113,6 +115,9 @@ static inline void csr_write(word_t *dest, word_t src) {
           //CLEAR TIMER INTR !!!
           ESTAT->is_2_12 &= 0x5ff;
       }
+  }
+  else if(is_write(CPUID) || is_write(TVAL)){
+    //do nothing
   }
   else{
       panic("[NEMU] unimplemented CSR");
@@ -140,9 +145,13 @@ static word_t priv_instr(uint32_t op, const rtlreg_t *src) {
     case PRIV_ERET: // ERTN
       CRMD->plv = PRMD->pplv;
       CRMD->ie  = PRMD->pie;
+      if(ESTAT->ecode == 0x3f){
+        CRMD->da = 0;
+        CRMD->pg = 1;
+      }
       return ERA->val;
     case PRIV_IDLE: // IDLE
-      return cpu.pc;
+      return cpu.idle_pc;   // cpu.pc is already snpc here.
     default: panic("Unsupported privilige operation = %d", op);
   }
   return 0;
@@ -161,7 +170,7 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
           csrrw(dest, src1, imm); 
       }
       return;
-    case HOSTCALL_TRAP: 
+    case HOSTCALL_TRAP:  // break syscall
       ret = raise_intr(imm, *src1); 
       break;
     case HOSTCALL_PRIV: 
@@ -170,6 +179,29 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
         longjmp_exception(EX_IPE);
       }else{
           ret = priv_instr(imm, src1);
+      }
+      break;
+    case HOSTCALL_TLB:
+      if(CRMD->plv == 0x3){
+        printf("PC: 0x%x [DEBUG]: this is TLB inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+        longjmp_exception(EX_IPE);
+      }else{
+        switch (imm) {
+          case TLB_SRCH:
+            tlbsrch();
+            break;
+          case TLB_RD:
+            tlbrd();
+            break;
+          case TLB_WR:
+            tlbwr();
+            break;
+          case TLB_FILL:
+            tlbfill(random()%CONFIG_TLB_ENTRIES);
+            break;
+          default:
+            break;
+        }
       }
       break;
     default: panic("Unsupported hostcall ID = %d", id);

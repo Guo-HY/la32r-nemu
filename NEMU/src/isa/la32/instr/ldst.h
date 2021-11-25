@@ -19,11 +19,6 @@
         longjmp_exception(EX_ALE); \
       } \
     } \
-    if((CRMD->plv == 0x3) && (addr & ((vaddr_t)0x80000000))){ \
-      ESTAT->esubcode = 1; \
-      printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x, user visited high half\n",cpu.pc,addr);\
-      longjmp_exception(EX_ADE); \
-    } \
     concat(rtl_, rtl_instr) (s, ddest, dsrc1, id_src2->imm, width, mmu_mode); \
   }
 
@@ -37,15 +32,7 @@
   def_ldst_template(concat(st_h , suffix), sm , 2, mmu_mode) \
   def_ldst_template(concat(st_b , suffix), sm , 1, mmu_mode)
 
-def_all_ldst(, MMU_DIRECT)
-//def_all_ldst(_mmu, MMU_TRANSLATE)
-//mmu is not added yet
-
-  // if((CRMD->plv == 0x3) && (addr & ((vaddr_t)0x80000000))){ 
-  //   ESTAT->esubcode = 1; 
-  //   printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x, user visited high half\n",cpu.pc,addr);
-  //   longjmp_exception(EX_ADE); 
-  // } 
+def_all_ldst(, isa_mmu_state())
 
 
 def_EHelper(ll_w) { 
@@ -55,11 +42,6 @@ def_EHelper(ll_w) {
       printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
-    } 
-    if((CRMD->plv == 0x3) && (addr & ((vaddr_t)0x80000000))){ 
-      ESTAT->esubcode = 1; 
-      printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x, user visited high half\n",cpu.pc,addr);
-      longjmp_exception(EX_ADE); 
     } 
     
     rtl_lms(s, ddest, dsrc2, id_src1->imm, 4, MMU_DIRECT); 
@@ -73,11 +55,6 @@ def_EHelper(sc_w) {
       printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
-    } 
-    if((CRMD->plv == 0x3) && (addr & ((vaddr_t)0x80000000))){ 
-      ESTAT->esubcode = 1; 
-      printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x, user visited high half\n",cpu.pc,addr);
-      longjmp_exception(EX_ADE); 
     } 
 
     if(cpu.ll_bit == 1){

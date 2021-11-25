@@ -31,6 +31,8 @@ def_EHelper(dbar) {
 def_EHelper(cacop) { 
     if(CRMD->plv == 0x3){
       if((id_src1->imm) & (0x10)){
+        printf("PC: 0x%x [DEBUG]: this is CACOP HIT inst.\n",cpu.pc);
+      }else{
         printf("PC: 0x%x [DEBUG]: this is CACOP inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
         longjmp_exception(EX_IPE);
       }

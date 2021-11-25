@@ -3,7 +3,7 @@
 
 
 #define INSTR_NULLARY(f) \
-  f(inv) f(nemu_trap) f(print_led) f(ertn) 
+  f(inv) f(nemu_trap) f(print_led) f(ertn) f(tlbsrch) f(tlbrd) f(tlbwr) f(tlbfill)
 #define INSTR_UNARY(f) \
   f(b) f(bl) f(syscall) f(break) f(idle) f(dbar) f(ibar)
 #define INSTR_BINARY(f) \
@@ -16,6 +16,6 @@
   f(sll_w) f(srl_w) f(sra_w) f(slli_w) f(srli_w) f(srai_w) \
   f(beq) f(bne) f(blt) f(bge) f(bltu) f(bgeu) f(jirl) \
   f(preld) f(ld_b) f(ld_h) f(ld_w) f(ld_bu) f(ld_hu) f(st_b) f(st_h) f(st_w) \
-  f(csrxchg) f(cacop) f(ll_w) f(sc_w)
+  f(csrxchg) f(cacop) f(ll_w) f(sc_w) f(invtlb)
 def_all_EXEC_ID();
 

@@ -26,7 +26,7 @@ static inline def_DopHelper(i) {
 
 static inline def_DopHelper(r) {
   bool load_val = flag;
-  static word_t zero_null = 0;
+  word_t zero_null = 0;
   op->preg = (!load_val && val == 0) ? &zero_null : &reg_l(val);
   print_Dop(op->str, OP_STR_SIZE, "%s", reg_name(val, 4));
 }
@@ -64,13 +64,13 @@ static inline def_DHelper(r2_i8) {
 static inline def_DHelper(r2_i14) {
   decode_op_i(s, id_src1, s->isa.instr.r2_i14.i14, true);
   decode_op_r(s, id_src2, s->isa.instr.r2_i14.rj, true);
-  decode_op_r(s, id_dest, s->isa.instr.r2_i14.rd, true);
+  decode_op_r(s, id_dest, s->isa.instr.r2_i14.rd, false);
 }
 
 static inline def_DHelper(r2_i14s) {
   decode_op_i(s, id_src1, s->isa.instr.r2_i14s.i14, false);
   decode_op_r(s, id_src2, s->isa.instr.r2_i14s.rj, true);
-  decode_op_r(s, id_dest, s->isa.instr.r2_i14s.rd, true);
+  decode_op_r(s, id_dest, s->isa.instr.r2_i14s.rd, false);
 }
 
 static inline def_DHelper(r2_i16) {
@@ -112,41 +112,16 @@ static inline def_DHelper(cacop) {
   decode_op_i(s, id_dest, s->isa.instr.r2_i12.rj, false);
 }
 
+static inline def_DHelper(invtlb) {
+  decode_op_r(s, id_src1, s->isa.instr.r3.rk, true);
+  decode_op_r(s, id_src2, s->isa.instr.r3.rj, true);
+  decode_op_i(s, id_dest, s->isa.instr.r3.rd, false);
+}
+
 
 /* use 'IDTAB' like codes written in isa/misp32 cannot pass compile
  * so i use 'def_INSTR_TAB' like codes in isa/riscv64
  */
-
-/*
-def_THelper(load) {
-  print_Dop(id_src1->str, OP_STR_SIZE, "%ld(%s)", id_src2->imm, reg_name(s->isa.instr.i.rs1, 4));
-  int mmu_mode = isa_mmu_state();
-  if (mmu_mode == MMU_DIRECT) {
-    def_INSTR_TAB("0010100000 ???????????? ????? ?????", ld_b);
-    def_INSTR_TAB("0010100001 ???????????? ????? ?????", ld_h);
-    def_INSTR_TAB("0010100010 ???????????? ????? ?????", ld_w);
-    def_INSTR_TAB("0010101000 ???????????? ????? ?????", ld_bu);
-    def_INSTR_TAB("0010101001 ???????????? ????? ?????", ld_hu);
-  } else if (mmu_mode == MMU_TRANSLATE) {
-
-  } else { assert(0); }
-  return EXEC_ID_inv;
-}
-
-def_THelper(store) {
-  print_Dop(id_src1->str, OP_STR_SIZE, "%ld(%s)", id_src2->imm, reg_name(s->isa.instr.i.rs1, 4));
-  int mmu_mode = isa_mmu_state();
-  if (mmu_mode == MMU_DIRECT) {
-    def_INSTR_TAB("0010100100 ???????????? ????? ?????", st_b);
-    def_INSTR_TAB("0010100101 ???????????? ????? ?????", st_h);
-    def_INSTR_TAB("0010100110 ???????????? ????? ?????", st_w);
-  } else if (mmu_mode == MMU_TRANSLATE) {
-
-  } else { assert(0); }
-  return EXEC_ID_inv;
-}
-*/
-
 
 def_THelper(main) {
 
@@ -220,6 +195,13 @@ def_THelper(main) {
   def_INSTR_IDTAB("00000110010010001 ???????????????",code_15, idle);
   def_INSTR_TAB("00000110010010000011100000000000",ertn);
 
+  def_INSTR_TAB("00000110010010000010100000000000",tlbsrch);
+  def_INSTR_TAB("00000110010010000010110000000000",tlbrd);
+  def_INSTR_TAB("00000110010010000011000000000000",tlbwr);
+  def_INSTR_TAB("00000110010010000011010000000000",tlbfill);  
+
+  def_INSTR_IDTAB("00000110010010011 ????? ????? ?????",invtlb, invtlb); 
+
   def_INSTR_TAB("00111000011100100???????????????",ibar);
   def_INSTR_TAB("00111000011100101???????????????",dbar);
 
@@ -235,19 +217,17 @@ int isa_fetch_decode(Decode *s) {
   //printf("[DEBUG]: current cpu.pc = 0x%x in isa_fetch_decode\n",cpu.pc);
   //printf("[DEBUG]: current s->pc = 0x%x in isa_fetch_decode\n",s->pc);
 
-  if(cpu.pc & ((vaddr_t)0x3)){
+  if(s->snpc & ((vaddr_t)0x3)){
     printf("PC: 0x%x [DEBUG]: inst fetch, PC = 0x%x, not 4 aligned\n", cpu.pc, cpu.pc);
+    BADV->val = s->snpc;
     longjmp_exception(EX_ADE); 
   }
-  else if((CRMD->plv == 0x3) && (cpu.pc & ((vaddr_t)0x80000000))){ 
-    printf("PC: 0x%x [DEBUG]: current PC = 0x%x, user visited high half\n",cpu.pc, cpu.pc);
-    longjmp_exception(EX_ADE); 
-  } 
-
-
+  // printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
   s->isa.instr.val = instr_fetch(&s->snpc, 4);
   int idx = table_main(s);
 
+  cpu.idle_pc = s->pc;
+  // printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
   s->type = INSTR_TYPE_N;
 
   return idx;

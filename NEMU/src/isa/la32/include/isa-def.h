@@ -2,6 +2,7 @@
 #define __ISA_LA32_H__
 
 #include <common.h>
+#include "../local-include/csr.h"
 
 // reg
 typedef struct {
@@ -13,6 +14,7 @@ typedef struct {
   rtlreg_t ll_bit;
   
   bool inst_idle;
+  vaddr_t idle_pc;
   bool INTR;
   bool guided_exec;
 
@@ -103,12 +105,9 @@ typedef struct {
 } la32_ISADecodeInfo;
 
 
-/* mmu is not added but copy codes below from isa/mips32 to finish compile */
-#define isa_mmu_state() (MMU_DYNAMIC)
 
-#define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
+#define isa_mmu_state() (((CRMD->da == 1) & (CRMD->pg == 0)) ? MMU_DIRECT : MMU_TRANSLATE)
 
-//#define isa_mmu_check(vaddr, len, type) ((vaddr & 0x80000000u) == 0 ? MMU_TRANSLATE : MMU_DIRECT)
-
+#define isa_mmu_check(vaddr, len, type) isa_mmu_state()
 
 #endif

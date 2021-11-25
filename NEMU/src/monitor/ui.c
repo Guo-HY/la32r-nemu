@@ -205,6 +205,30 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_tlb(char *args){
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+
+  if (arg == NULL) {
+    /* no argument given */
+    printf("Totally %d TLB entries\n", CONFIG_TLB_ENTRIES);
+  }
+  else {
+    int n = strtol(arg, NULL, 10);
+    printf("tlb %d\n", n);
+    if(n < CONFIG_TLB_ENTRIES){
+      print_tlb_entry(n);
+    }else if(n == CONFIG_TLB_ENTRIES){
+      for(int j=0; j<CONFIG_TLB_ENTRIES; j++){
+        print_tlb_entry(j);
+      }
+    }else{
+      printf("tlb index out of range\n");
+    }
+  }
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -219,6 +243,7 @@ static struct {
   { "p", "Evaluate the value of expression", cmd_p },
   { "w", "Set watchpoint", cmd_w },
   { "d", "Delete watchpoint", cmd_d },
+  { "tlb", "List TLB entries", cmd_tlb },
 #ifdef CONFIG_MODE_SYSTEM
   { "detach", "detach diff test", cmd_detach },
   { "attach", "attach diff test", cmd_attach },

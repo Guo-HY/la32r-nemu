@@ -1,7 +1,7 @@
 def_EHelper(csrrd) { 
 //   printf("this is a csr instruction\n"); 
 //   printf("csrrd\n"); 
-//   word_t id = id_src1->imm;
+
   rtl_hostcall(s, HOSTCALL_CSR, s0, NULL, NULL, id_src1->imm);
   rtl_mv(s, ddest, s0);
 }
@@ -9,7 +9,7 @@ def_EHelper(csrrd) {
 def_EHelper(csrwr) { 
 //   printf("this is a csr instruction\n"); 
 //   printf("csrwr\n"); 
-//   word_t id = id_src1->imm;
+
   rtl_mv(s, s1, ddest);
   rtl_hostcall(s, HOSTCALL_CSR, s0, s1, NULL, id_src1->imm);
   rtl_mv(s, ddest, s0);

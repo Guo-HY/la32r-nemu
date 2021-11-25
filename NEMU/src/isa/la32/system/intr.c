@@ -18,17 +18,15 @@ word_t raise_intr(uint32_t ecode, vaddr_t epc) {
     ERA->val = epc;
   }
   
-  switch (ecode) {
-    case EX_ADE:
-    // case EX_ALE: ALE write mem addr in BADV, handled in ../instr/ldst.h
-    case EX_PIL:
-    case EX_PIS:
-    case EX_PIF:
-    case EX_PME:
-    case EX_PPI: BADV->val=epc; break;
+  //BAV is set before call raise_intr
+
+  if(ecode == EX_TLBR){
+    CRMD->da = 1;
+    CRMD->pg = 0;
+    return TLBRENTRY->val;
+  }else{
+    return EENTRY->val;
   }
-  // TODO: ADD TLB INTR
-  return EENTRY->val;
 }
 
 word_t isa_query_intr() {

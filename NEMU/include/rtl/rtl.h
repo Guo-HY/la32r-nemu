@@ -50,6 +50,7 @@ enum {
   HOSTCALL_CSR,   // system registers / control status registers
   HOSTCALL_TRAP,  // trap by interrupts/exceptions
   HOSTCALL_PRIV,  // privilige instructions
+  HOSTCALL_TLB,  //  TLB instructions
 };
 
 def_rtl(hostcall, uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,

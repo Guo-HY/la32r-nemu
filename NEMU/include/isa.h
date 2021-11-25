@@ -17,6 +17,7 @@ void init_isa();
 extern CPU_state cpu;
 extern rtlreg_t csr_array[4096];
 void isa_reg_display();
+void print_tlb_entry(int n);
 word_t isa_reg_str2val(const char *name, bool *success);
 
 // exec
