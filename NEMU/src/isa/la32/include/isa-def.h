@@ -9,14 +9,23 @@ typedef struct {
   struct {
     rtlreg_t _32;
   } gpr[32];
-
   vaddr_t pc;
-  rtlreg_t ll_bit;
+
+  rtlreg_t crmd, prmd, euen, ecfg;
+  rtlreg_t estat, era, badv, eentry;
+  rtlreg_t tlbidx, tlbehi, tlbelo0, tlbelo1;
+  rtlreg_t asid, pgdl, pgdh;
+  rtlreg_t save0, save1, save2, save3;
+  rtlreg_t tid, tcfg, tval, ticlr;
+  rtlreg_t llbctl, tlbrentry, dmw0, dmw1;
+
+  rtlreg_t stable_counter_id;
+  rtlreg_t stable_counter_lo;
+  rtlreg_t stable_counter_hi;
   
+  rtlreg_t ll_bit;  
   bool inst_idle;
   vaddr_t idle_pc;
-  bool INTR;
-  bool guided_exec;
 
 } la32_CPU_state;
 

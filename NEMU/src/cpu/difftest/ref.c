@@ -42,6 +42,10 @@ void difftest_regcpy(void *dut, bool direction) {
   isa_difftest_regcpy(dut, direction);
 }
 
+void difftest_timercpy(void *dut) {
+  isa_difftest_timercpy(dut);
+}
+
 #ifdef RV64_FULL_DIFF
 void difftest_csrcpy(void *dut, bool direction) {
   isa_difftest_csrcpy(dut, direction);

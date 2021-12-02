@@ -5,9 +5,15 @@
 
 //load some inst for test
 static const uint32_t img [] = {
-0x06488000,
-0x04006020, //	csrwr	$r0,0x18
-0x04022020, //	csrwr	$r0,0x88
+0x1c0002c3,// 	pcaddu12i	$r3,22(0x16)
+0x28b42063,// 	ld.w	$r3,$r3,-760(0xd08)
+0x02bf8063,// 	addi.w	$r3,$r3,-32(0xfe0)
+0x1c0002c3,// 	pcaddu12i	$r3,22(0x16)
+0x02bf8063,// 	addi.w	$r3,$r3,-32(0xfe0)
+0x1c0002c3,// 	pcaddu12i	$r3,22(0x16)
+0x02bf8063,// 	addi.w	$r3,$r3,-32(0xfe0)
+0x1c0002c3,// 	pcaddu12i	$r3,22(0x16)
+0x02bf8063,// 	addi.w	$r3,$r3,-32(0xfe0)
 
 };
 

@@ -5,7 +5,7 @@
 #define INSTR_NULLARY(f) \
   f(inv) f(nemu_trap) f(print_led) f(ertn) f(tlbsrch) f(tlbrd) f(tlbwr) f(tlbfill)
 #define INSTR_UNARY(f) \
-  f(b) f(bl) f(syscall) f(break) f(idle) f(dbar) f(ibar)
+  f(b) f(bl) f(syscall) f(break) f(idle) f(dbar) f(ibar) f(rdcntvl_w) f(rdcntvh_w) f(rdcntid_w)
 #define INSTR_BINARY(f) \
   f(lu12i_w) f(pcaddu12i) \
   f(csrrd) f(csrwr)

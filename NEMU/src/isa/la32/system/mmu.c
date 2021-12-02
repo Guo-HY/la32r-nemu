@@ -256,7 +256,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         }
       }
       if(match_tlb == 0){
-        printf("EXCEPTION TLBR.\n");
+        printf("PC: 0x%x [DEBUG]: EXCEOTION TLBR\n",cpu.pc);  
         BADV->val = vaddr;
         TLBEHI->vppn = vaddr >> 13;
         longjmp_exception(EX_TLBR); 
@@ -266,30 +266,30 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       }else if(match_tlb == 1){
         if(tlb[matched_tlb_index].lo[even_or_odd].V == 0){
           if(type == MEM_TYPE_IFETCH){
-            printf("EXCEPTION PIF.\n");
+            printf("PC: 0x%x [DEBUG]: EXCEOTION PIF\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIF); 
           }else if(type == MEM_TYPE_READ){
-            printf("EXCEPTION PIL.\n");
+            printf("PC: 0x%x [DEBUG]: EXCEOTION PIL\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIL); 
           }else if(type == MEM_TYPE_WRITE){
-            printf("EXCEPTION PIS.\n");
+            printf("PC: 0x%x [DEBUG]: EXCEOTION PIS\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIS); 
           }
         }
         if(tlb[matched_tlb_index].lo[even_or_odd].PLV < CRMD->plv){
-          printf("EXCEPTION PPI.\n");
+          printf("PC: 0x%x [DEBUG]: EXCEOTION PPI\n",cpu.pc);  
           BADV->val = vaddr;
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PPI);          
         }
         if((type == MEM_TYPE_WRITE) && (tlb[matched_tlb_index].lo[even_or_odd].D == 0)){
-          printf("EXCEPTION PME.\n");
+          printf("PC: 0x%x [DEBUG]: EXCEOTION PME\n",cpu.pc);  
           BADV->val = vaddr;
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PME);          

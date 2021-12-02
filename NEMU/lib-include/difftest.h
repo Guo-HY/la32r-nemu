@@ -13,7 +13,7 @@ enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 #elif defined(__ISA_mips32__)
 # define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 38) // GRPs + status + lo + hi + badvaddr + cause + pc
 #elif defined(__ISA_la32__)
-# define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 33) //GPS + PC
+# define DIFFTEST_REG_SIZE (sizeof(uint32_t) * (33 + 27)) //GPS + PC + other csrs
 #elif defined(__ISA_riscv32__)
 # define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 33) // GRPs + pc
 #elif defined(__ISA_riscv64__)
@@ -26,6 +26,17 @@ enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 #else
 # error Unsupport ISA
 #endif
+
+struct la32_timer
+{
+  // for stable_counter
+  uint32_t counter_id;
+  uint32_t stable_counter_l;
+  uint32_t stable_counter_h;
+  // for TVAL csr
+  uint32_t time_val;
+};
+
 
 #ifdef RV64_UARCH_SYNC
 struct SyncState {

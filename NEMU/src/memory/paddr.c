@@ -65,7 +65,6 @@ word_t paddr_read(paddr_t addr, int len) {
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   else {
     printf("ERROR: invalid mem read from paddr " FMT_PADDR ", NEMU raise illegal inst exception\n", addr);
-    longjmp_exception(EX_II);
   }
   return 0;
 #endif
@@ -79,7 +78,6 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   if (likely(in_pmem(addr))) return pmem_write(addr, len, data);
   else {
     printf("ERROR: invalid mem write to paddr " FMT_PADDR ", NEMU raise illegal inst exception\n", addr);
-    longjmp_exception(EX_II);
     return;
   } 
 #endif

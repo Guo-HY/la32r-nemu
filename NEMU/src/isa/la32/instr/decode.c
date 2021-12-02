@@ -31,6 +31,10 @@ static inline def_DopHelper(r) {
   print_Dop(op->str, OP_STR_SIZE, "%s", reg_name(val, 4));
 }
 
+static inline def_DHelper(r2) {
+  decode_op_r(s, id_src1, s->isa.instr.r2.rj, true);
+  decode_op_r(s, id_dest, s->isa.instr.r2.rd, false);
+}
 
 static inline def_DHelper(r3) {
   decode_op_r(s, id_src1, s->isa.instr.r3.rj, true);
@@ -204,6 +208,10 @@ def_THelper(main) {
 
   def_INSTR_TAB("00111000011100100???????????????",ibar);
   def_INSTR_TAB("00111000011100101???????????????",dbar);
+  
+  def_INSTR_IDTAB("0000000000000000011000 ????? 00000",r2, rdcntid_w);
+  def_INSTR_IDTAB("0000000000000000011000 00000 ?????",r2, rdcntvl_w);
+  def_INSTR_IDTAB("0000000000000000011001 00000 ?????",r2, rdcntvh_w);
 
   def_INSTR_TAB("10000000000000000000000000000000",nemu_trap);
   def_INSTR_TAB("11000000000000000000000000000000",print_led);

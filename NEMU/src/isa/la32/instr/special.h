@@ -1,17 +1,30 @@
 #include "../local-include/intr.h"
 #include "../local-include/csr.h"
 
+def_EHelper(nemu_trap) {
+  save_globals(s);
+  rtl_hostcall(s, HOSTCALL_EXIT, NULL, &cpu.gpr[4]._32, NULL, 0); // gpr[4] is $v0
+  longjmp_exec(NEMU_EXEC_END);
+}
+
+def_EHelper(print_led) {
+  printf("####  current result: 0x%08x  ####\n", cpu.gpr[12]._32);
+}
+
 def_EHelper(inv) {
   // save_globals(s);
   // rtl_hostcall(s, HOSTCALL_INV, NULL, NULL, NULL, 0);
   // longjmp_exec(NEMU_EXEC_END);
   
   /* FOR RUN FUNC, INVALID INST IS AN EXCEPTION NEED TO HANDLE */
+  printf("PC: 0x%x [DEBUG]: INVALID INST\n",cpu.pc);  
   rtl_li(s, s1, s->pc);
   rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_INE);
   rtl_jr(s, s0);  
 
 }
+
+// below are some inst that did not implement
 
 def_EHelper(preld) { 
   printf("this is PERLD instruction\n"); 
@@ -40,15 +53,3 @@ def_EHelper(cacop) {
     printf("this is CACOP instruction\n"); 
     printf("CACOP do nothing in NEMU\n"); 
 }
-
-
-def_EHelper(nemu_trap) {
-  save_globals(s);
-  rtl_hostcall(s, HOSTCALL_EXIT, NULL, &cpu.gpr[4]._32, NULL, 0); // gpr[4] is $v0
-  longjmp_exec(NEMU_EXEC_END);
-}
-
-def_EHelper(print_led) {
-  printf("####  current result: 0x%08x  ####\n", cpu.gpr[12]._32);
-}
-

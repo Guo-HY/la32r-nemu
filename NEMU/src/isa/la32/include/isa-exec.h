@@ -4,3 +4,4 @@
 #include "../instr/ldst.h"
 #include "../instr/csr_op.h"
 #include "../instr/priv.h"
+#include "../instr/timer.h"
