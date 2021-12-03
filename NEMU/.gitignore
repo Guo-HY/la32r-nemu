@@ -8,5 +8,6 @@
 !README.md
 !scripts/runall.sh
 !Kconfig
+!src/isa/x86/*.txt
 include/config
 include/generated
