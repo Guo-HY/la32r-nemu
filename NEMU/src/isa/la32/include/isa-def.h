@@ -26,6 +26,7 @@ typedef struct {
   rtlreg_t ll_bit;  
   bool inst_idle;
   vaddr_t idle_pc;
+  bool INTR;
 
 } la32_CPU_state;
 

@@ -170,7 +170,7 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
           csrrw(dest, src1, imm); 
       }
       return;
-    case HOSTCALL_TRAP:  // break syscall
+    case HOSTCALL_TRAP:  // break syscalls
       ret = raise_intr(imm, *src1); 
       break;
     case HOSTCALL_PRIV: 

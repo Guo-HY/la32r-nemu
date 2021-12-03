@@ -55,6 +55,16 @@ CONFIG_TLB_ENTRIES=0x20
 # CONFIG_MEM_COMPRESS is not set
 # end of Memory Configuration
 
+# CONFIG_DEVICE is not set
+# CONFIG_HAS_SERIAL is not set
+# CONFIG_HAS_UARTLITE is not set
+# CONFIG_HAS_TIMER is not set
+# CONFIG_HAS_VGA is not set
+# CONFIG_HAS_KEYBOARD is not set
+# CONFIG_HAS_AUDIO is not set
+# CONFIG_HAS_DISK is not set
+# CONFIG_HAS_SDCARD is not set
+
 #
 # Processor difftest reference config
 #

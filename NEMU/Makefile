@@ -1,4 +1,3 @@
-NEMU_HOME=/home/wwt/nemu/testrv64/NEMU
 ifeq ($(wildcard $(NEMU_HOME)/src/nemu-main.c),)
   $(error NEMU_HOME=$(NEMU_HOME) is not a NEMU repo)
 endif

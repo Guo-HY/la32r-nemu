@@ -37,7 +37,6 @@ struct la32_timer
   uint32_t time_val;
 };
 
-
 #ifdef RV64_UARCH_SYNC
 struct SyncState {
   uint64_t lrscValid;

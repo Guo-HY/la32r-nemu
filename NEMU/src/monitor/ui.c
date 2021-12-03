@@ -229,6 +229,26 @@ static int cmd_tlb(char *args){
   return 0;
 }
 
+static int cmd_b(char *args){
+  char *arg = strtok(NULL, " ");
+  uint32_t breakaddr = 0;
+
+  if (arg == NULL) {
+    /* no argument given */
+    Log("usage: b ADDR");
+  }
+  else {
+    bool success;
+    breakaddr = expr(args, &success);
+    if(success) { printf("NEMU will stop when next_pc == "FMT_WORD "\n", breakaddr); }
+    else { printf("Bad expression\n"); }
+    while(cpu.pc != breakaddr)
+      cpu_exec(1);
+  }
+
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -244,6 +264,7 @@ static struct {
   { "w", "Set watchpoint", cmd_w },
   { "d", "Delete watchpoint", cmd_d },
   { "tlb", "List TLB entries", cmd_tlb },
+  { "b", "Set a one-off breakpoint and run", cmd_b },
 #ifdef CONFIG_MODE_SYSTEM
   { "detach", "detach diff test", cmd_detach },
   { "attach", "attach diff test", cmd_attach },
