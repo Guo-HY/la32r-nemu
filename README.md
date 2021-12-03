@@ -41,7 +41,6 @@ https://github.com/OpenXiangShan/xs-env/blob/master/setup-tools.sh
 
 3、进入 `NEMU` 主目录之后，可以进行编译，输入以下命令完成一次编译：
 ```shell
-make clean                    // 删除 .build 目录及其内容 
 make la32-primary_defconfig   // 导入配置文件
 make
 ```
