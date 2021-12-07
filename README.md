@@ -114,6 +114,36 @@ resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large inte
 
 如果你需要配置 `TLB` 表项的数目，可以在配置文件中找到并修改 `CONFIG_TLB_ENTRIES` 一项。如果超过32项，就需要再修改 `CSR` 寄存器 `TLBIDX` 的 `index` 位域的宽度以及 `TLBIDX_W_MASK` 了。
 
+## **加载程序并运行**
+
+### **编译difftest**
+由于`NEMU`目录下的Makefile存在未知的问题，此处我们需要手动编译difftest源码生成动态链接库。Makefile第112行打印了difftest源码所在的目录，复制该目录。在`NEMU`目录下执行
+```shell
+make 上一步复制的目录
+```
+执行后该目录下会生成./build/la32-qemu-so
+
+### **修改config并链接运行**
+需要修改的部分如下：
+```
+CONFIG_DIFFTEST=y
+CONFIG_DIFFTEST_REF_PATH="tools/qemu-socket-diff"
+CONFIG_DIFFTEST_REF_NAME="qemu"
+```
+请注意，直接修改.config或使用Makefile修改均可能造成修改不生效，建议使用`make menuconfig`进行修改。修改后执行
+```shell
+make
+```
+检查生成了可执行文件/build/la32-nemu-interpreter，随后执行。注意需使用-d链接上一步生成的动态链接库。
+```shell
+ ./build/la32-nemu-interpreter -d ./tools/qemu-socket-diff/build/la32-qemu-so ../func/main.bin
+```
+
+### **注意事项**
+1. 请在环境变量中添加qemu-system-loognson32
+2. ./tools/qemu-socket-diff/include/isa/la32.h中描述了启动qemu的参数，用户可以根据需求自行更改
+3. qemu执行后会生成single.log，记录每条指令执行后的体系结构状态，若程序卡死请尽快强制退出，否则程序会持续向single.log输出造成其占用过多空间
+
 ## **《龙芯架构32位精简版参考手册》中写得不清楚的地方**
 **本节内容仅为个人理解，对指令集的最终解释归龙芯中科所有！**
 * `P51 6.1.1 中断类型`，描述为一共有 12 个中断，但是 `ESTAT.IS` 域有13位，并没有说明差一个差在哪，哪一位是不用的。对比了完整手册，实际上 `ESTAT.IS[10]` 是性能监测计数溢出中断，在 `LA32` 精简版中是没有这个中断的，应当始终为0。

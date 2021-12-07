@@ -37,9 +37,9 @@ CONFIG_CC_DEBUG=y
 # Testing and Debugging
 #
 CONFIG_DEBUG=y
-# CONFIG_DIFFTEST is not set
-CONFIG_DIFFTEST_REF_PATH="none"
-CONFIG_DIFFTEST_REF_NAME="none"
+CONFIG_DIFFTEST=y
+CONFIG_DIFFTEST_REF_PATH="tools/qemu-socket-diff"
+CONFIG_DIFFTEST_REF_NAME="qemu"
 # CONFIG_DETERMINISTIC is not set
 # CONFIG_IQUEUE is not set
 # end of Testing and Debugging
