@@ -115,8 +115,7 @@ typedef struct {
 } la32_ISADecodeInfo;
 
 
-
-#define isa_mmu_state() (((CRMD->da == 1) & (CRMD->pg == 0)) ? MMU_DIRECT : MMU_TRANSLATE)
+#define isa_mmu_state() (((CRMD->da == 0) & (CRMD->pg == 1)) ? MMU_TRANSLATE : MMU_DIRECT)
 
 #define isa_mmu_check(vaddr, len, type) isa_mmu_state()
 
