@@ -9,7 +9,7 @@ typedef struct {
   struct {
     rtlreg_t _32;
   } gpr[32];
-  vaddr_t pc;
+  vaddr_t idle_pc;
 
   rtlreg_t crmd, prmd, euen, ecfg;
   rtlreg_t estat, era, badv, eentry;
@@ -25,7 +25,8 @@ typedef struct {
   
   rtlreg_t ll_bit;  
   bool inst_idle;
-  vaddr_t idle_pc;
+
+  vaddr_t pc;
   bool INTR;
 
 } la32_CPU_state;
