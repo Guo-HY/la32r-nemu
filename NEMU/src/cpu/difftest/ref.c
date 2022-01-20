@@ -46,7 +46,11 @@ void difftest_timercpy(void *dut) {
   isa_difftest_timercpy(dut);
 }
 
-#ifdef RV64_FULL_DIFF
+void difftest_tlbfill_index_set(uint32_t index) {
+  isa_difftest_tlbfill_index_set(index);
+}
+
+//#ifdef RV64_FULL_DIFF
 void difftest_csrcpy(void *dut, bool direction) {
   isa_difftest_csrcpy(dut, direction);
 }
@@ -62,17 +66,17 @@ int difftest_store_commit(uint64_t *saddr, uint64_t *sdata, uint8_t *smask) {
   return 0;
 #endif
 }
-#endif
+//#endif
 
 void difftest_exec(uint64_t n) {
   cpu_exec(n);
 }
 
-#ifdef CONFIG_GUIDED_EXEC
+//#ifdef CONFIG_GUIDED_EXEC
 void difftest_guided_exec(void * guide) {
   isa_difftest_guided_exec(guide);
 }
-#endif
+//#endif
 
 void difftest_raise_intr(word_t NO) {
   isa_difftest_raise_intr(NO);

@@ -2,6 +2,7 @@
 #include <difftest.h>
 #include "../local-include/intr.h"
 #include "../local-include/csr.h"
+#include "../local-include/mmu.h"
 
 /* copy from isa/riscv64 */
 
@@ -29,7 +30,7 @@ static void csr_prepare() {
   cpu.tcfg = TCFG->val;
   cpu.tval = TVAL->val;
   cpu.ticlr = TICLR->val;
-  cpu.llbctl = csrid_read(0x60); // sstatus
+  cpu.llbctl = csrid_read(0x60); 
   cpu.tlbrentry = TLBRENTRY->val;
   cpu.dmw0 = DMW0->val;
   cpu.dmw1 = DMW1->val;
@@ -103,4 +104,18 @@ void isa_difftest_timercpy(void *dut) {
   cpu.stable_counter_hi = ms->stable_counter_h;
 
   TVAL->val = ms->time_val;
+}
+
+
+void isa_difftest_guided_exec(void * guide) {
+  return ;
+}
+
+
+void isa_difftest_uarchstatus_cpy(void *dut, bool direction) {
+  return ;
+}
+
+void isa_difftest_tlbfill_index_set(uint32_t index) {
+  tlbfill_index_diff = index;
 }

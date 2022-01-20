@@ -25,7 +25,7 @@ typedef struct {
   
   rtlreg_t ll_bit;  
   bool inst_idle;
-
+  
   vaddr_t pc;
   bool INTR;
 
@@ -114,6 +114,7 @@ typedef struct {
     uint32_t val;
   } instr;
 } la32_ISADecodeInfo;
+
 
 
 #define isa_mmu_state() (((CRMD->da == 0) & (CRMD->pg == 1)) ? MMU_TRANSLATE : MMU_DIRECT)

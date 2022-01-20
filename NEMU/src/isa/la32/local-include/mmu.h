@@ -14,4 +14,6 @@ int tlbsrch();
 void tlbrd();
 void invtlb(uint32_t op, uint32_t asid, uint32_t va);
 
+uint32_t tlbfill_index_diff; // tlbfill index from dut when run difftest
+
 #endif

@@ -197,7 +197,7 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
             tlbwr();
             break;
           case TLB_FILL:
-            tlbfill(random()%CONFIG_TLB_ENTRIES);
+            tlbfill( MUXDEF(CONFIG_SHARE, tlbfill_index_diff, random()%CONFIG_TLB_ENTRIES) );
             break;
           default:
             break;
