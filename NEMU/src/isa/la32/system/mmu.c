@@ -76,7 +76,6 @@ void tlbwr(){
 }
 
 void tlbfill(uint32_t idx){
-  //TODO: receive index from CPU
   update_tlb(idx);
 }
 

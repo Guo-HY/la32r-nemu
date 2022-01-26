@@ -52,7 +52,6 @@ def_EHelper(tlbwr) {
 
 def_EHelper(tlbfill) {
   printf("PC: 0x%x [DEBUG]: this is tlbfill\n",cpu.pc);  
-  // TODO receive idx from CPU
   rtl_hostcall(s, HOSTCALL_TLB, NULL, NULL, NULL, TLB_FILL); 
 }
 
