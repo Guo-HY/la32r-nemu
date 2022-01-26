@@ -54,8 +54,8 @@ void isa_difftest_csrcpy(void *dut, bool direction);
 void isa_difftest_raise_intr(word_t NO);
 void isa_difftest_uarchstatus_cpy(void *dut, bool direction);
 void isa_difftest_timercpy(void *dut);
-void isa_difftest_guided_exec(void * guide);
 void isa_difftest_tlbfill_index_set(uint32_t index);
+void isa_difftest_guided_exec(void * guide);
 #ifdef CONFIG_MULTICORE_DIFF
 void isa_difftest_set_mhartid(int n);
 #endif
