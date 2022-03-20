@@ -21,7 +21,10 @@ void init_csr() {
 };
 
 static inline bool csr_is_legal(uint32_t addr) {
-  assert(addr < 4096);
+  // assert(addr < 4096);
+  if(addr >= 4096){
+    return false;
+  }
   // CSR does not exist
   if(!csr_exist[addr]) {
 #ifdef CONFIG_PANIC_ON_UNIMP_CSR
@@ -131,7 +134,8 @@ word_t csrid_read(uint32_t csrid) {
 
 static void csrrw(rtlreg_t *dest, const rtlreg_t *src, uint32_t csrid) {
   if (!csr_is_legal(csrid)) {
-    //longjmp_exception(EX_II);
+    // read illegal csr, return read result 0
+    if (dest != NULL) { *dest = 0; }
     return;
   }
   word_t *csr = csr_decode(csrid);

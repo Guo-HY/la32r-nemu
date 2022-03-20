@@ -7,38 +7,6 @@
 #include "../local-include/intr.h"
 #include "../local-include/mmu.h"
 
-#pragma pack(8)
-typedef union {
-  struct {
-    uint32_t E    : 1;
-    uint32_t ASID : 10;
-    uint32_t G    : 1;
-    uint32_t PS   : 6;
-    uint32_t VPPN : 19;
-    uint32_t      : 27;    
-  };
-  uint64_t val;
-} EntryHi;
-#pragma pack()
-
-typedef union {
-  struct {
-    uint32_t V     : 1;
-    uint32_t D     : 1;
-    uint32_t MAT   : 2;
-    uint32_t PLV   : 2;
-    uint32_t PPN   : 24;
-    uint32_t pad0  : 2;
-  };
-  uint32_t val;  
-} EntryLo;
-
-struct {
-  EntryHi hi;
-  EntryLo lo[2];
-} tlb [CONFIG_TLB_ENTRIES];
-
-
 void init_mmu() {
   int i;
   for (i = 0; i < CONFIG_TLB_ENTRIES; i ++) {

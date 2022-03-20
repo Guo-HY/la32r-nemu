@@ -46,6 +46,9 @@ static word_t vaddr_mmu_read(struct Decode *s, vaddr_t addr, int len, int type) 
   vaddr_t vaddr = addr;
 #endif
   paddr_t paddr = isa_mmu_translate(addr, len, type);
+  if(type == MEM_TYPE_IFETCH){
+    printf("[NEMU]: inst fetch at paddr 0x%lx\n",paddr);
+  }
 
 #ifdef CONFIG_MULTICORE_DIFF
   word_t rdata = (type == MEM_TYPE_IFETCH ? golden_pmem_read : paddr_read)(addr, len);

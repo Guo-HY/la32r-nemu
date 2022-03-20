@@ -106,6 +106,15 @@ void isa_difftest_timercpy(void *dut) {
   TVAL->val = ms->time_val;
 }
 
+void isa_difftest_tlbcpy(uint32_t index, void *dut){
+  assert(index <= CONFIG_TLB_ENTRIES);
+  
+  struct tlb_struct* tlb_temp = (struct tlb_struct*) dut;
+  tlb[index].hi = tlb_temp->hi;
+  tlb[index].lo[0] = tlb_temp->lo[0];
+  tlb[index].lo[1] = tlb_temp->lo[1];
+}
+
 
 void isa_difftest_guided_exec(void * guide) {
   return ;

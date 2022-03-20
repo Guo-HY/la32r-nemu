@@ -232,6 +232,7 @@ int isa_fetch_decode(Decode *s) {
   }
   // printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
   s->isa.instr.val = instr_fetch(&s->snpc, 4);
+  printf("[NEMU]: inst code : 0x%lx\n",s->isa.instr.val);
   int idx = table_main(s);
 
   cpu.idle_pc = s->pc;

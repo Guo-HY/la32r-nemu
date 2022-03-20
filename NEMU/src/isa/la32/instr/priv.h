@@ -4,7 +4,7 @@
 
 def_EHelper(syscall) {
   printf("PC: 0x%x [DEBUG]: this is syscall\n",cpu.pc);
-  if(id_src1 == 0x11){
+  if(id_src1->imm == 0x11){
     printf("This is syscall 0x11, end\n");
     // end
     save_globals(s);
