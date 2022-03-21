@@ -224,7 +224,6 @@ static int execute(int n) {
   prev_s = &s;
   for (;n > 0; n --) {
     fetch_decode(&s, cpu.pc);
-    printf("[NEMU]: inst code : 0x%lx\n",s.isa.instr.val);
     cpu.pc = s.snpc;
 #ifdef XIANGSHAN_DEBUG
     printf("[NEMU] exec pc = 0x%lx\n", s.pc);

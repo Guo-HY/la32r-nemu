@@ -113,7 +113,7 @@ static inline def_DHelper(jirl) {
 static inline def_DHelper(cacop) {
   decode_op_i(s, id_src1, s->isa.instr.r2_i12.rd, false);
   decode_op_i(s, id_src2, s->isa.instr.r2_i12.i12, false);
-  decode_op_i(s, id_dest, s->isa.instr.r2_i12.rj, false);
+  decode_op_r(s, id_dest, s->isa.instr.r2_i12.rj, false);
 }
 
 static inline def_DHelper(invtlb) {
@@ -232,7 +232,7 @@ int isa_fetch_decode(Decode *s) {
   }
   // printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
   s->isa.instr.val = instr_fetch(&s->snpc, 4);
-  printf("[NEMU]: inst code : 0x%lx\n",s->isa.instr.val);
+  //printf("[NEMU]: inst code : 0x%lx\n",s->isa.instr.val);
   int idx = table_main(s);
 
   cpu.idle_pc = s->pc;

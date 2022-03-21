@@ -5,16 +5,8 @@
 
 //load some inst for test
 static const uint32_t img [] = {
-0x028006f7, // 	addi.w	$r23,$r23,1(0x1)
-0x02800019, // 	addi.w	$r25,$r0,0
-0x1400002e, // 	lu12i.w	$r14,1(0x1)
-0x0280000d, // 	addi.w	$r13,$r0,0
-0x14000004, // 	lu12i.w	$r4,0
-0x1400000c, // 	lu12i.w	$r12,0
-0x00103484, // 	add.w	$r4,$r4,$r13
-0x001039ad, // 	add.w	$r13,$r13,$r14
-0x5c0f2584, // 	bne	$r12,$r4,3876(0xf24) # 1c0396c4 <inst_error>
-0x80000000, // 	nemu_trap
+0x00000001,
+0x80000000 // 	nemu_trap
 
 };
 

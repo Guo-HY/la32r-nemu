@@ -231,6 +231,8 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         printf("ERROR: multiple tlb entries matched.\n");
         exit(1);
       }else if(match_tlb == 1){
+        //printf("[NEMU]: matched tlb index: 0x%x\n",matched_tlb_index);
+        //print_tlb_entry(matched_tlb_index);
         if(tlb[matched_tlb_index].lo[even_or_odd].V == 0){
           if(type == MEM_TYPE_IFETCH){
             printf("PC: 0x%x [DEBUG]: EXCEOTION PIF\n",cpu.pc);  
