@@ -18,7 +18,7 @@ def_EHelper(inv) {
   
   /* FOR RUN FUNC, INVALID INST IS AN EXCEPTION NEED TO HANDLE */
   printf("PC: 0x%x [DEBUG]: INVALID INST\n",s->pc);  
-  printf("[NEMU]: INVALID INST CODE : 0x %lx\n",s->isa.instr.val);
+  printf("[NEMU]: INVALID INST CODE : 0x%x\n",s->isa.instr.val);
   rtl_li(s, s1, s->pc);
   rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_INE);
   rtl_jr(s, s0);  
@@ -48,10 +48,10 @@ def_EHelper(cacop) {
         vaddr_t addr = *ddest + id_src2->simm ;
         isa_mmu_translate(addr, 4,MEM_TYPE_READ);
     }
-    
+
     if(CRMD->plv == 0x3){
       if((id_src1->imm) & (0x10)){
-        printf("PC: 0x%x [DEBUG]: this is CACOP HIT inst.\n",cpu.pc);
+        //printf("PC: 0x%x [DEBUG]: this is CACOP HIT inst.\n",cpu.pc);
         // vaddr_t addr = *ddest + id_src2->simm ;
         // isa_mmu_translate(addr, 4,MEM_TYPE_READ);
       }else{
