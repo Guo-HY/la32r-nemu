@@ -44,7 +44,7 @@ def_EHelper(ll_w) {
       longjmp_exception(EX_ALE); 
     } 
     
-    rtl_lms(s, ddest, dsrc2, (id_src1->imm << 2), 4, MMU_DIRECT); 
+    rtl_lms(s, ddest, dsrc2, (id_src1->imm << 2), 4, isa_mmu_state()); 
     cpu.ll_bit = 1;
 }
 
@@ -58,7 +58,7 @@ def_EHelper(sc_w) {
     } 
 
     if(cpu.ll_bit == 1){
-      rtl_sm(s, ddest, dsrc2, (id_src1->imm << 2), 4, MMU_DIRECT);
+      rtl_sm(s, ddest, dsrc2, (id_src1->imm << 2), 4, isa_mmu_state());
       rtl_mv(s, ddest, &(cpu.ll_bit));
       cpu.ll_bit = 0;
     }else{
