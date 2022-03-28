@@ -21,7 +21,7 @@ static inline void difftest_attach() {}
 #endif
 
 extern void (*ref_difftest_memcpy)(paddr_t dest, void *src, size_t n, bool direction);
-extern void (*ref_difftest_regcpy)(void *c, bool direction);
+extern void (*ref_difftest_regcpy)(void *c, bool direction, bool do_csr);
 extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_raise_intr)(uint64_t NO);
 

@@ -38,8 +38,8 @@ void difftest_memcpy(paddr_t nemu_addr, void *dut_buf, size_t n, bool direction)
 #endif
 }
 
-void difftest_regcpy(void *dut, bool direction) {
-  isa_difftest_regcpy(dut, direction);
+void difftest_regcpy(void *dut, bool direction, bool do_csr) {
+  isa_difftest_regcpy(dut, direction, do_csr);
 }
 
 void difftest_timercpy(void *dut) {
