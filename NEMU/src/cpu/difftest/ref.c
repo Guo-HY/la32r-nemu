@@ -38,8 +38,8 @@ void difftest_memcpy(paddr_t nemu_addr, void *dut_buf, size_t n, bool direction)
 #endif
 }
 
-void difftest_regcpy(void *dut, bool direction) {
-  isa_difftest_regcpy(dut, direction);
+void difftest_regcpy(void *dut, bool direction, bool do_csr) {
+  isa_difftest_regcpy(dut, direction, do_csr);
 }
 
 void difftest_timercpy(void *dut) {
@@ -63,9 +63,9 @@ void difftest_uarchstatus_cpy(void *dut, bool direction) {
   isa_difftest_uarchstatus_cpy(dut, direction);
 }
 
-int difftest_store_commit(uint64_t *saddr, uint64_t *sdata, uint8_t *smask) {
+int difftest_store_commit(uint64_t saddr, uint64_t sdata) {
 #ifdef CONFIG_DIFFTEST_STORE_COMMIT
-  return check_store_commit(saddr, sdata, smask);
+  return check_store_commit(saddr, sdata);
 #else
   return 0;
 #endif

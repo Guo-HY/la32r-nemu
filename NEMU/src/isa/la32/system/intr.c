@@ -41,7 +41,7 @@ word_t isa_query_intr() {
   word_t intvec = 0; // 0~12 bits
   if(CRMD->ie){
     intvec = ECFG->lie & ((ESTAT->is_2_12 << 2) | ESTAT->is_01);
-    printf("PC: 0x%x [DEBUG]: intvec is 0x%x in isa_query_intr\n",cpu.pc,intvec);
+    // printf("PC: 0x%x [DEBUG]: intvec is 0x%x in isa_query_intr\n",cpu.pc,intvec);
     if(intvec != 0)
       return EX_INT;
     else

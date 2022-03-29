@@ -36,21 +36,37 @@ def_all_ldst(, isa_mmu_state())
 
 
 def_EHelper(ll_w) { 
-    vaddr_t addr = *dsrc2 + id_src1->imm; 
-    printf("PC: 0x%x [DEBUG]: this is ll_w, mem addr 0x%x\n", cpu.pc, addr);
+    vaddr_t addr = *dsrc2 + (id_src1->simm << 2); 
+    //printf("imm: 0x%x\n",id_src1->simm);
+    //printf("dsrc2 :0x%x\n",*dsrc2);
+    //printf("inst code : 0x%x\n",s->isa.instr.val);
+    //printf("PC: 0x%x [DEBUG]: this is ll_w, mem addr 0x%x\n", cpu.pc, addr);
     if(addr & ((vaddr_t)0x3)){ 
       printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
+      //printf("r27: 0x%x\n",cpu.gpr[27]._32);
+      //printf("eentry :0x%x\n",EENTRY->val);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
     } 
     
-    rtl_lms(s, ddest, dsrc2, id_src1->imm, 4, MMU_DIRECT); 
+    rtl_lms(s, ddest, dsrc2, id_src1->simm<<2, 4, isa_mmu_state()); 
     cpu.ll_bit = 1;
 }
 
 def_EHelper(sc_w) { 
-    vaddr_t addr = *dsrc2 + id_src1->imm; 
-    printf("PC: 0x%x [DEBUG]: this is sc_w, mem addr 0x%x\n", cpu.pc, addr);
+    vaddr_t addr = *dsrc2 + (id_src1->simm << 2); 
+    //printf("PC: 0x%x [DEBUG]: this is sc_w, mem addr 0x%x\n", cpu.pc, addr);
+    // if (s->pc == 0x1c06ba04) {
+    //   printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+    //   printf("pc: 0x1c06ba04, llibit = %d\n", cpu.ll_bit);
+    //   printf("addr = 0x%x, data = 0x%x\n", addr, *ddest);
+    //   getchar();
+    // }
+
+    // printf("[NEMU]pc: 0x%x, llibit = %d\n", s->pc, cpu.ll_bit);
+    // printf("[NEMU]addr = 0x%x, data = 0x%x\n", addr, *ddest);
+    // getchar();
+
     if(addr & ((vaddr_t)0x3)){ 
       printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
@@ -58,11 +74,12 @@ def_EHelper(sc_w) {
     } 
 
     if(cpu.ll_bit == 1){
-      rtl_sm(s, ddest, dsrc2, id_src1->imm, 4, MMU_DIRECT);
+      rtl_sm(s, ddest, dsrc2, id_src1->simm<<2, 4, isa_mmu_state());
       rtl_mv(s, ddest, &(cpu.ll_bit));
       cpu.ll_bit = 0;
     }else{
       rtl_mv(s, ddest, &(cpu.ll_bit));
     }
+    // printf("=========================pmem: 0x%08x\n", *(uint32_t*)(0x100000000ul + 0x200040));
 }
 

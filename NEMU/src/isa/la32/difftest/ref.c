@@ -68,12 +68,14 @@ static void csr_writeback() {
   cpu.ll_bit = (cpu.llbctl & 0x1);
 }
 
-void isa_difftest_regcpy(void *dut, bool direction) {
+void isa_difftest_regcpy(void *dut, bool direction, bool do_csr) {
   if (direction == DIFFTEST_TO_REF) {
     memcpy(&cpu, dut, DIFFTEST_REG_SIZE);
-    csr_writeback();
+    if(do_csr)
+      csr_writeback();
   } else {
-    csr_prepare();
+    if(do_csr)
+      csr_prepare();
     memcpy(dut, &cpu, DIFFTEST_REG_SIZE);
   }
 }

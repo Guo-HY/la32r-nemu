@@ -18,7 +18,7 @@ def_EHelper(inv) {
   
   /* FOR RUN FUNC, INVALID INST IS AN EXCEPTION NEED TO HANDLE */
   printf("PC: 0x%x [DEBUG]: INVALID INST\n",s->pc);  
-  printf("[NEMU]: INVALID INST CODE : 0x %lx\n",s->isa.instr.val);
+  printf("[NEMU]: INVALID INST CODE : 0x %x\n",s->isa.instr.val);
   rtl_li(s, s1, s->pc);
   rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_INE);
   rtl_jr(s, s0);  
@@ -29,17 +29,17 @@ def_EHelper(inv) {
 
 def_EHelper(preld) { 
   printf("this is PERLD instruction\n"); 
-  printf("PRELD do nothing in NEMU\n"); 
+  //printf("PRELD do nothing in NEMU\n"); 
 }
 
 def_EHelper(ibar) { 
-  printf("this is IBAR instruction\n"); 
-  printf("IBAR do nothing in NEMU\n"); 
+  //printf("this is IBAR instruction\n"); 
+  //printf("IBAR do nothing in NEMU\n"); 
 }
 
 def_EHelper(dbar) { 
-  printf("this is DBAR instruction\n"); 
-  printf("DBAR do nothing in NEMU\n"); 
+  // printf("this is DBAR instruction\n"); 
+  //printf("DBAR do nothing in NEMU\n"); 
 }
 
 def_EHelper(cacop) { 
@@ -60,5 +60,5 @@ def_EHelper(cacop) {
       }
     }
     printf("this is CACOP instruction\n"); 
-    printf("CACOP do nothing in NEMU\n"); 
+    //printf("CACOP do nothing in NEMU\n"); 
 }

@@ -90,7 +90,7 @@ static uint64_t head = 0, tail = 0;
 
 void store_commit_queue_push(uint64_t addr, uint64_t data, int len) {
   static int overflow = 0;
-  if (cpu.amo || overflow) {
+  if (overflow) {
     return;
   }
   store_commit_t *commit = store_commit_queue + tail;
@@ -98,26 +98,34 @@ void store_commit_queue_push(uint64_t addr, uint64_t data, int len) {
     overflow = 1;
     printf("[WARNING] difftest store queue overflow, difftest store commit disabled\n");
   };
-  uint64_t offset = addr % 8ULL;
-  commit->addr = addr - offset;
+  uint64_t offset = addr % 4ULL;
+  // commit->addr = addr - offset;
+  commit->addr = addr;
   commit->valid = 1;
+  commit->data = data;
+
+  // printf("addr = 0x%x, data = 0x%x, len = %d\n", addr, data, len);
+
   switch (len) {
     case 1:
+      // commit->data = data & 0x000000ff;
       commit->data = (data & 0xffULL) << (offset << 3);
-      commit->mask = 0x1 << offset;
+      // commit->mask = 0x1 << offset;
       break;
     case 2:
+      // commit->data = data & 0x0000ffff;
       commit->data = (data & 0xffffULL) << (offset << 3);
-      commit->mask = 0x3 << offset;
+      // commit->mask = 0x3 << offset;
       break;
     case 4:
-      commit->data = (data & 0xffffffffULL) << (offset << 3);
-      commit->mask = 0xf << offset;
-      break;
-    case 8:
       commit->data = data;
-      commit->mask = 0xff;
+      // commit->data = (data & 0xffffffffULL) << (offset << 3);
+      // commit->mask = 0xf << offset;
       break;
+    // case 8:
+    //   commit->data = data;
+    //   commit->mask = 0xff;
+    //   break;
     default:
       assert(0);
   }
@@ -134,18 +142,23 @@ store_commit_t *store_commit_queue_pop() {
   return result;
 }
 
-int check_store_commit(uint64_t *addr, uint64_t *data, uint8_t *mask) {
-  *addr = *addr - (*addr % 0x8ULL);
+int check_store_commit(uint64_t addr, uint64_t data) {
+  // *addr = *addr - (*addr % 0x8ULL);
   store_commit_t *commit = store_commit_queue_pop();
   int result = 0;
+
   if (!commit) {
+    // printf("head = %d, tail = %d\n", head, tail);
     printf("NEMU does not commit any store instruction.\n");
     result = 1;
   }
-  else if (*addr != commit->addr || *data != commit->data || *mask != commit->mask) {
-    *addr = commit->addr;
-    *data = commit->data;
-    *mask = commit->mask;
+  else if (addr != commit->addr || data != commit->data) {
+    // *addr = commit->addr;
+    // *data = commit->data;
+    // *mask = commit->mask;
+    printf("\n==============  REF Regs  ==============\n");
+    printf("different at pc = 0x%010x, paddr = 0x%lx, data = 0x%lx\n", cpu.idle_pc, commit->addr, commit->data);
+
     result = 1;
   }
   return result;

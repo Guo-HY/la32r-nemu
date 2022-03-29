@@ -28,6 +28,7 @@ void isa_reg_display() {
   printf("INDEX: 0x%08x, TLBEHI: 0x%08x, TLBELO0: 0x%08x, TLBELO1: 0x%08x\n", csr_array[0x10], csr_array[0x11], csr_array[0x12], csr_array[0x13]);
   printf("ASID: 0x%08x, TLBRENTRY: 0x%08x, DMW0: 0x%08x, DMW1: 0x%08x\n", csr_array[0x18], csr_array[0x88], csr_array[0x180], csr_array[0x181]);
   printf("*******************************************************************************\n");
+  fflush(NULL);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
