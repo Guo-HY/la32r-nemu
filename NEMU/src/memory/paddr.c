@@ -156,8 +156,8 @@ int check_store_commit(uint64_t addr, uint64_t data) {
     // *addr = commit->addr;
     // *data = commit->data;
     // *mask = commit->mask;
-    printf("\n==============  REF Regs  ==============\n");
-    printf("different at pc = 0x%010x, paddr = 0x%lx, data = 0x%lx\n", cpu.idle_pc, commit->addr, commit->data);
+    printf("ref different at pc = 0x%08x, paddr = 0x%lx, data = 0x%lx\n", cpu.idle_pc, commit->addr, commit->data);
+    fflush(NULL);
 
     result = 1;
   }

@@ -4,6 +4,7 @@
 #define ENABLE_HOSTTLB 1
 #endif
 
+#include <cpu/decode.h>
 #include <memory/paddr.h>
 #include <memory/vaddr.h>
 #include <memory/host-tlb.h>
@@ -69,6 +70,8 @@ static void vaddr_mmu_write(struct Decode *s, vaddr_t addr, int len, word_t data
   vaddr_t vaddr = addr;
 #endif
   paddr_t paddr = isa_mmu_translate(addr, len, MEM_TYPE_WRITE);
+  // printf("[NEMU] mmu_write: pc 0x%lx vaddr 0x%lx, paddr 0x%lx, len %d, data 0x%lx\n", s->pc, 
+  // addr, paddr, len, data);
 
 #ifdef XIANGSHAN_DEBUG
   printf("[NEMU] mmu_write: vaddr 0x%lx, paddr 0x%lx, len %d, data 0x%lx\n",

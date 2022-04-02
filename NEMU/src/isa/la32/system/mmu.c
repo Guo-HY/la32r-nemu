@@ -224,9 +224,13 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       }
       if(match_tlb == 0){
         printf("PC: 0x%x [DEBUG]: EXCEOTION TLBR\n",cpu.pc);  
-        getchar();
-        isa_reg_display();
-        getchar();
+        // getchar();
+        // isa_reg_display();
+        // getchar();
+        // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+        // printf("tlbr vaddr=0xa0201000, data = 0x%8x\n", *(uint32_t*)(0x100000000ul + 0xa0201000));
+        // printf("tlbr: paddr=0x201000, data = 0x%8x\n", *(uint32_t*)(0x100000000ul + 0x201000));
+        // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
         BADV->val = vaddr;
         TLBEHI->vppn = vaddr >> 13;
         longjmp_exception(EX_TLBR); 
