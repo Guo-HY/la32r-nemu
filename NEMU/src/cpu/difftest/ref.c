@@ -46,8 +46,8 @@ void difftest_timercpy(void *dut) {
   isa_difftest_timercpy(dut);
 }
 
-void difftest_estat_sync(uint32_t index) {
-  isa_difftest_estat_sync(index);
+void difftest_estat_sync(uint32_t index, uint32_t mask) {
+  isa_difftest_estat_sync(index, mask);
 }
 
 void difftest_tlbcpy(uint32_t index, void *dut) {
