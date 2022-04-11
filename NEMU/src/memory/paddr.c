@@ -9,7 +9,8 @@
 
 #ifdef CONFIG_USE_MMAP
 #include <sys/mman.h>
-static const uint8_t *pmem = (uint8_t *)0x100000000ul;
+//static const uint8_t *pmem = (uint8_t *)0x100000000ul;
+static const uint8_t *pmem = NULL;
 #else
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
@@ -32,11 +33,12 @@ static inline void pmem_write(paddr_t addr, int len, word_t data) {
 void init_mem() {
 #ifdef CONFIG_USE_MMAP
   void *ret = mmap((void *)pmem, CONFIG_MSIZE, PROT_READ | PROT_WRITE,
-      MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-  if (ret != pmem) {
+      MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+  if (ret == MAP_FAILED) {
     perror("mmap");
     assert(0);
   }
+  pmem = ret;
 #endif
 
 #ifdef CONFIG_DIFFTEST_STORE_COMMIT
