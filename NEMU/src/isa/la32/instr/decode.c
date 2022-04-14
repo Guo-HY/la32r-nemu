@@ -20,7 +20,6 @@ static inline uint32_t get_instr(Decode *s) {
 
 static inline def_DopHelper(i) {
   op->imm = val;
-  //printf("[debug]: get imm: %08x\n",op->imm);
   print_Dop(op->str, OP_STR_SIZE, (flag ? "0x%x" : "%d"), op->imm);
 }
 
@@ -222,28 +221,15 @@ def_THelper(main) {
 
 
 int isa_fetch_decode(Decode *s) {
-  //printf("[DEBUG]: current cpu.pc = 0x%x in isa_fetch_decode\n",cpu.pc);
-  //printf("[DEBUG]: current s->pc = 0x%x in isa_fetch_decode\n",s->pc);
-
   if(s->snpc & ((vaddr_t)0x3)){
-    printf("PC: 0x%x [DEBUG]: inst fetch, PC = 0x%x, not 4 aligned\n", cpu.pc, cpu.pc);
+    printf("PC: 0x%x [NEMU]: inst fetch, PC = 0x%x, not 4 aligned\n", cpu.pc, cpu.pc);
     BADV->val = s->snpc;
     longjmp_exception(EX_ADE); 
   }
-  // printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
+
   s->isa.instr.val = instr_fetch(&s->snpc, 4);
-  // if (cpu.pc == 0xa0430be0) {
-  //       printf("=======================\n");
-  //       printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
-  //       printf("[NEMU]: inst code : 0x%lx\n",s->isa.instr.val);
-  //       printf("=======================\n");
-  //   }
-
-  //printf("[NEMU]: inst code : 0x%lx\n",s->isa.instr.val);
   int idx = table_main(s);
-
   cpu.idle_pc = s->pc;
-  // printf("[DEBUG]:in isa_fetch cpu.pc = 0x%x s.snpc = 0x%x s.pc = 0x%x\n",cpu.pc,s->snpc,s->pc);
   s->type = INSTR_TYPE_N;
 
   return idx;

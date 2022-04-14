@@ -7,14 +7,14 @@
     vaddr_t addr = *dsrc1 + id_src2->imm; \
     if(width == 4){ \
       if(addr & ((vaddr_t)0x3)){ \
-        printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not %d aligned\n",cpu.pc,addr,width);\
+        printf("PC: 0x%x [NEMU]: current mem addr = 0x%x not %d aligned\n",cpu.pc,addr,width);\
         BADV->val = addr; \
         longjmp_exception(EX_ALE); \
       } \
     } \
     else if(width == 2){ \
       if(addr & ((vaddr_t)0x1)){ \
-        printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not %d aligned\n",cpu.pc,addr,width);\
+        printf("PC: 0x%x [NEMU]: current mem addr = 0x%x not %d aligned\n",cpu.pc,addr,width);\
         BADV->val = addr; \
         longjmp_exception(EX_ALE); \
       } \
@@ -38,7 +38,7 @@ def_all_ldst(, isa_mmu_state())
 def_EHelper(ll_w) { 
     vaddr_t addr = *dsrc2 + (id_src1->simm << 2); 
     if(addr & ((vaddr_t)0x3)){ 
-      printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
+      printf("PC: 0x%x [NEMU]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
     } 
@@ -50,7 +50,7 @@ def_EHelper(ll_w) {
 def_EHelper(sc_w) { 
     vaddr_t addr = *dsrc2 + (id_src1->simm << 2); 
     if(addr & ((vaddr_t)0x3)){ 
-      printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
+      printf("PC: 0x%x [NEMU]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
     } 

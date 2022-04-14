@@ -191,7 +191,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
     }else{     // DMW reg not matched, use tlb
 
       if((CRMD->plv == 0x3) && (vaddr & ((vaddr_t)0x80000000))){      
-        printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x, user visited high half\n",cpu.pc,vaddr);
+        printf("PC: 0x%x [NEMU]: current mem addr = 0x%x, user visited high half\n",cpu.pc,vaddr);
         if(type == MEM_TYPE_IFETCH){
           ESTAT->esubcode = 0; 
           BADV->val = cpu.pc; // CPU.PC is the same as vaddr here..
@@ -223,14 +223,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         }
       }
       if(match_tlb == 0){
-        printf("PC: 0x%x [DEBUG]: EXCEOTION TLBR\n",cpu.pc);  
-        // getchar();
-        // isa_reg_display();
-        // getchar();
-        // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
-        // printf("tlbr vaddr=0xa0201000, data = 0x%8x\n", *(uint32_t*)(0x100000000ul + 0xa0201000));
-        // printf("tlbr: paddr=0x201000, data = 0x%8x\n", *(uint32_t*)(0x100000000ul + 0x201000));
-        // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+        printf("PC: 0x%x [NEMU]: EXCEOTION TLBR\n",cpu.pc);  
         BADV->val = vaddr;
         TLBEHI->vppn = vaddr >> 13;
         longjmp_exception(EX_TLBR); 
@@ -238,34 +231,32 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         printf("ERROR: multiple tlb entries matched.\n");
         exit(1);
       }else if(match_tlb == 1){
-        //printf("[NEMU]: matched tlb index: 0x%x\n",matched_tlb_index);
-        //print_tlb_entry(matched_tlb_index);
         if(tlb[matched_tlb_index].lo[even_or_odd].V == 0){
           if(type == MEM_TYPE_IFETCH){
-            printf("PC: 0x%x [DEBUG]: EXCEOTION PIF\n",cpu.pc);  
+            printf("PC: 0x%x [NEMU]: EXCEOTION PIF\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIF); 
           }else if(type == MEM_TYPE_READ){
-            printf("PC: 0x%x [DEBUG]: EXCEOTION PIL\n",cpu.pc);  
+            printf("PC: 0x%x [NEMU]: EXCEOTION PIL\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIL); 
           }else if(type == MEM_TYPE_WRITE){
-            printf("PC: 0x%x [DEBUG]: EXCEOTION PIS\n",cpu.pc);  
+            printf("PC: 0x%x [NEMU]: EXCEOTION PIS\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIS); 
           }
         }
         if(tlb[matched_tlb_index].lo[even_or_odd].PLV < CRMD->plv){
-          printf("PC: 0x%x [DEBUG]: EXCEOTION PPI\n",cpu.pc);  
+          printf("PC: 0x%x [NEMU]: EXCEOTION PPI\n",cpu.pc);  
           BADV->val = vaddr;
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PPI);          
         }
         if((type == MEM_TYPE_WRITE) && (tlb[matched_tlb_index].lo[even_or_odd].D == 0)){
-          printf("PC: 0x%x [DEBUG]: EXCEOTION PME\n",cpu.pc);  
+          printf("PC: 0x%x [NEMU]: EXCEOTION PME\n",cpu.pc);  
           BADV->val = vaddr;
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PME);          
@@ -282,7 +273,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       }
     }
   }
-  printf("[DEBUG]: addr translate failed\n");
+  printf("[NEMU]: addr translate failed\n");
   return vaddr;
 }
 

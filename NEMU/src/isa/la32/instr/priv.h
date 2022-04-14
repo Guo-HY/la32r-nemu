@@ -36,7 +36,6 @@ def_EHelper(ertn) {
 }
 
 def_EHelper(idle) {
-  // TODO: when intr comes, the next instr of IDLE while be marked, not IDLE itself
   // printf("PC: 0x%x [DEBUG]: this is idle\n",cpu.pc);  
   cpu.inst_idle = 1;
   rtl_hostcall(s, HOSTCALL_PRIV, s0, NULL, NULL, PRIV_IDLE);  
@@ -66,7 +65,7 @@ def_EHelper(tlbfill) {
 def_EHelper(invtlb) {
   // printf("PC: 0x%x [DEBUG]: this is invtlb\n",cpu.pc);  
   if(CRMD->plv == 0x3){
-    printf("PC: 0x%x [DEBUG]: this is TLB inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+    printf("PC: 0x%x [NEMU]: this is TLB inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
     longjmp_exception(EX_IPE);
   }else{
     invtlb(id_dest->imm, *dsrc2, *dsrc1);

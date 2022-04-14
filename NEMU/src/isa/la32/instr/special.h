@@ -17,7 +17,7 @@ def_EHelper(inv) {
   // longjmp_exec(NEMU_EXEC_END);
   
   /* FOR RUN FUNC, INVALID INST IS AN EXCEPTION NEED TO HANDLE */
-  printf("PC: 0x%x [DEBUG]: INVALID INST\n",s->pc);  
+  printf("PC: 0x%x [NEMU]: INVALID INST\n",s->pc);  
   printf("[NEMU]: INVALID INST CODE : 0x %x\n",s->isa.instr.val);
   rtl_li(s, s1, s->pc);
   rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_INE);
@@ -28,7 +28,7 @@ def_EHelper(inv) {
 // below are some inst that did not implement
 
 def_EHelper(preld) { 
-  printf("this is PERLD instruction\n"); 
+  // printf("this is PERLD instruction\n"); 
   //printf("PRELD do nothing in NEMU\n"); 
 }
 
@@ -44,7 +44,7 @@ def_EHelper(dbar) {
 
 def_EHelper(cacop) { 
     if((id_src1->imm) & (0x10)){
-        printf("PC: 0x%x [DEBUG]: this is CACOP HIT inst.\n",cpu.pc);
+        printf("PC: 0x%x [NEMU]: this is CACOP HIT inst.\n",cpu.pc);
         vaddr_t addr = *ddest + id_src2->simm ;
         isa_mmu_translate(addr, 4,MEM_TYPE_READ);
     }
@@ -52,13 +52,10 @@ def_EHelper(cacop) {
     if(CRMD->plv == 0x3){
       if((id_src1->imm) & (0x10)){
         //printf("PC: 0x%x [DEBUG]: this is CACOP HIT inst.\n",cpu.pc);
-        // vaddr_t addr = *ddest + id_src2->simm ;
-        // isa_mmu_translate(addr, 4,MEM_TYPE_READ);
       }else{
-        printf("PC: 0x%x [DEBUG]: this is CACOP inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+        printf("PC: 0x%x [NEMU]: this is CACOP inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
         longjmp_exception(EX_IPE);
       }
     }
     printf("this is CACOP instruction\n"); 
-    //printf("CACOP do nothing in NEMU\n"); 
 }

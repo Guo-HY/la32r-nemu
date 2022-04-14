@@ -18,10 +18,4 @@ static inline const char* reg_name(int index, int width) {
   return regsl[index];
 }
 
-// static inline const char* cp0_name(int index) {
-//   extern const char* cp0[];
-//   IFDEF(CONFIG_RT_CHECK, assert(index >= 0 && index < 32));
-//   return cp0[index];
-// }
-
 #endif
