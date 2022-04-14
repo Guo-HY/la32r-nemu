@@ -60,8 +60,8 @@ int tlbsrch(){
             find ++;
           }
         }
-        else if(tlb[i].hi.PS == 22){
-          if((TLBEHI->vppn >> 10) == (tlb[i].hi.VPPN >> 10)){
+        else if(tlb[i].hi.PS == 21){
+          if((TLBEHI->vppn >> 9) == (tlb[i].hi.VPPN >> 9)){
             TLBIDX->index = i;
             TLBIDX->ne = 0;
             find ++;
@@ -137,8 +137,8 @@ void invtlb(uint32_t op, uint32_t asid, uint32_t va){
           if(tlb[i].hi.VPPN == (va >> 13)){
             tlb[i].hi.E = 0;
           }
-        }else if(tlb[i].hi.PS == 22){
-          if((tlb[i].hi.VPPN >> 10) == (va >> 23)){
+        }else if(tlb[i].hi.PS == 21){
+          if((tlb[i].hi.VPPN >> 9) == (va >> 22)){
             tlb[i].hi.E = 0;
           }
         }
@@ -152,8 +152,8 @@ void invtlb(uint32_t op, uint32_t asid, uint32_t va){
           if(tlb[i].hi.VPPN == (va >> 13)){
             tlb[i].hi.E = 0;
           }
-        }else if(tlb[i].hi.PS == 22){
-          if((tlb[i].hi.VPPN >> 10) == (va >> 23)){
+        }else if(tlb[i].hi.PS == 21){
+          if((tlb[i].hi.VPPN >> 9) == (va >> 22)){
             tlb[i].hi.E = 0;
           }
         }
@@ -213,10 +213,10 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
               match_tlb ++;
             }
           }
-          else if(tlb[i].hi.PS == 22){
-            if((vaddr >> 23) == (tlb[i].hi.VPPN >> 10)){
+          else if(tlb[i].hi.PS == 21){
+            if((vaddr >> 22) == (tlb[i].hi.VPPN >> 9)){
               matched_tlb_index = i;
-              even_or_odd = (vaddr >> 22)%2;
+              even_or_odd = (vaddr >> 21)%2;
               match_tlb ++;
             }        
           }
@@ -224,6 +224,13 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       }
       if(match_tlb == 0){
         printf("PC: 0x%x [DEBUG]: EXCEOTION TLBR\n",cpu.pc);  
+        // getchar();
+        // isa_reg_display();
+        // getchar();
+        // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+        // printf("tlbr vaddr=0xa0201000, data = 0x%8x\n", *(uint32_t*)(0x100000000ul + 0xa0201000));
+        // printf("tlbr: paddr=0x201000, data = 0x%8x\n", *(uint32_t*)(0x100000000ul + 0x201000));
+        // printf("$$$$$$$$$$$$$$$$$$$$$$$$$\n");
         BADV->val = vaddr;
         TLBEHI->vppn = vaddr >> 13;
         longjmp_exception(EX_TLBR); 
@@ -266,10 +273,10 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
     
         if(tlb[matched_tlb_index].hi.PS == 12){
           return (((tlb[matched_tlb_index].lo[even_or_odd].PPN) << 12) | (vaddr & 0x00000fff));
-        }else if(tlb[matched_tlb_index].hi.PS == 22){
-          return ((((tlb[matched_tlb_index].lo[even_or_odd].PPN) << 12) & 0xffc00000) | (vaddr & 0x003fffff));
+        }else if(tlb[matched_tlb_index].hi.PS == 21){
+          return ((((tlb[matched_tlb_index].lo[even_or_odd].PPN) << 12) & 0xffe00000) | (vaddr & 0x001fffff));
         }else{
-          printf("ERROR: PS != 12 NOR PS != 22, please check tlb\n");
+          printf("ERROR: PS != 12 NOR PS != 21, please check tlb\n");
           exit(1);
         }
       }

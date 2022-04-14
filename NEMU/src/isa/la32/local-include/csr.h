@@ -21,6 +21,7 @@
     word_t val; \
   } concat(name, _t);
 
+// uint32_t estat_sync; 
 
 CSR_STRUCT_START(CRMD)
   uint32_t plv : 2;

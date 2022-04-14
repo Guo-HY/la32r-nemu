@@ -36,29 +36,26 @@ def_all_ldst(, isa_mmu_state())
 
 
 def_EHelper(ll_w) { 
-    vaddr_t addr = *dsrc2 + (id_src1->imm << 2); 
-    printf("PC: 0x%x [DEBUG]: this is ll_w, mem addr 0x%x\n", cpu.pc, addr);
+    vaddr_t addr = *dsrc2 + (id_src1->simm << 2); 
     if(addr & ((vaddr_t)0x3)){ 
       printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
     } 
     
-    rtl_lms(s, ddest, dsrc2, (id_src1->imm << 2), 4, isa_mmu_state()); 
+    rtl_lms(s, ddest, dsrc2, id_src1->simm<<2, 4, isa_mmu_state()); 
     cpu.ll_bit = 1;
 }
 
 def_EHelper(sc_w) { 
-    vaddr_t addr = *dsrc2 + (id_src1->imm << 2); 
-    printf("PC: 0x%x [DEBUG]: this is sc_w, mem addr 0x%x\n", cpu.pc, addr);
+    vaddr_t addr = *dsrc2 + (id_src1->simm << 2); 
     if(addr & ((vaddr_t)0x3)){ 
       printf("PC: 0x%x [DEBUG]: current mem addr = 0x%x not 4 aligned\n",cpu.pc,addr);
       BADV->val = addr; 
       longjmp_exception(EX_ALE); 
     } 
-
     if(cpu.ll_bit == 1){
-      rtl_sm(s, ddest, dsrc2, (id_src1->imm << 2), 4, isa_mmu_state());
+      rtl_sm(s, ddest, dsrc2, id_src1->simm<<2, 4, isa_mmu_state());
       rtl_mv(s, ddest, &(cpu.ll_bit));
       cpu.ll_bit = 0;
     }else{

@@ -57,6 +57,7 @@ void isa_difftest_timercpy(void *dut);
 void isa_difftest_tlbcpy(uint32_t index, void *dut);
 void isa_difftest_tlbfill_index_set(uint32_t index);
 void isa_difftest_guided_exec(void * guide);
+void isa_difftest_estat_sync(uint32_t index, uint32_t mask);
 #ifdef CONFIG_MULTICORE_DIFF
 void isa_difftest_set_mhartid(int n);
 #endif

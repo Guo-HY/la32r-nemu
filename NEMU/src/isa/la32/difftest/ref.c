@@ -130,3 +130,8 @@ void isa_difftest_uarchstatus_cpy(void *dut, bool direction) {
 void isa_difftest_tlbfill_index_set(uint32_t index) {
   tlbfill_index_diff = index;
 }
+
+void isa_difftest_estat_sync(uint32_t index, uint32_t mask) {
+  ESTAT->val = (ESTAT->val & ~mask) | (index & mask);
+  // ESTAT->val = index;
+}

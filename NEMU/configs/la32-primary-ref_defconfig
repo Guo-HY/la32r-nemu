@@ -69,7 +69,7 @@ CONFIG_TLB_ENTRIES=0x20
 # Processor difftest reference config
 #
 CONFIG_SHARE=y
-# CONFIG_DIFFTEST_STORE_COMMIT is not set
+CONFIG_DIFFTEST_STORE_COMMIT=y
 # CONFIG_GUIDED_EXEC is not set
 # CONFIG_LARGE_COPY is not set
 # CONFIG_PANIC_ON_UNIMP_CSR is not set

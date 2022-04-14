@@ -35,7 +35,9 @@ git clone https://github.com/OSCPU/nemu.git
 
 ## **编译运行**
 1、首先需要安装依赖。由于本项目是从 ysyx 项目中的 NEMU 移植而来，所以请按照 ysyx 的标准安装依赖：
-https://github.com/OpenXiangShan/xs-env/blob/master/setup-tools.sh
+https://github.com/OpenXiangShan/xs-env/blob/master/setup-tools.shru
+
+也可以不根据以上链接安装依赖。在编译的过程中手动安装缺失的库（如libreadline等）即可。
 
 2、完成依赖安装之后，需要设置环境变量：`export NEMU_HOME=...`，设置为 `NEMU` 主目录。
 
@@ -63,6 +65,9 @@ resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large inte
 这是软件模拟浮点运算的相关代码，浮点指令没有实现，不用管。（并不明白为啥这里会报警告）
 
 如果你没有再看到其他报错，那么 `NEMU` 的可执行文件 `la32-nemu-interpreter` 就已经在 `.build` 之中喇。
+
+如果你需要使用 NEMU 进行差分测试，那么将导入的配置文件替换为 `la32-primary-ref_defconfig` 之后再 `make`，生成的动态链接库文件 `la32-nemu-interpreter-so` 也会在 `.build` 之中。
+
 ## **加载程序并运行**
 `NEMU` 有两种方法加载程序，第一种，是将程序的 `.bin` 文件作为参数，在运行程序时传入，如：
 ```
@@ -123,9 +128,9 @@ resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large inte
 * 手册中说 `syscall` `break` 指令编码时可以编一个参数进去，但并没有说这个参数怎么传递。实际上完全可以忽视这个参数不管。
 ## 其他
 * 《龙芯架构32位精简版参考手册》可以从龙芯官网下载。https://www.loongson.cn/FileShow
-* `LA32` 相关工具链可以在这里下载：http://114.242.206.180:24989/nextcloud/index.php/s/7xXTPkWg6Jn5KLW
+* `LA32` 相关工具链请前往龙芯官方的 Chiplab 仓库下载 https://gitee.com/loongson-edu/chiplab
 * 目前 `NEMU` 在打印指令的操作数时会有一些不准确、操作数顺序与汇编文件不一样的情况，这是打印的问题，暂时懒得改。
-* 目前 `NEMU` 打印的 `PC` 几乎都是 “下一条待执行的指令的 `PC`”，而不是 “本条已执行的指令的 `PC`”，相信聪明的你一定可以理解。
+* 目前 `NEMU` 打印的 `PC` 有一些是 “下一条待执行的指令的 `PC`”，有一些是 “本条已执行的指令的 `PC`”，相信聪明的你一定可以辨别。
 * 目前 `NEMU` 的基本功能正确，在不实现 `RDCNTV{L/H}.W、RDCNTID` 指令的情况下可以正确执行 `coremark` 。但 `NEMU` 尚未经过充分的随机指令测试，如果你发现了 bug 或者其他问题，请提出 Issue 或者联系我： wangweitong18@mails.ucas.ac.cn
 * 由于 ysyx 的 `NEMU` 项目本身并没有任何的开源许可证，在与 ysyx 的王华强学长交流后，本项目只开源与 `LA32` 实现相关的源代码，其他架构的代码不包含在本项目中，但也请**不要删除** `NEMU/src/isa` 下的其他文件夹。
 * 目前本项目和开源仓库仅由我一个人开发管理，这也是我正式开源并管理的第一个仓库，不当之处还请各位不吝赐教，谢谢大家看到这里。
