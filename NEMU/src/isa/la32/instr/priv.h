@@ -10,6 +10,11 @@ def_EHelper(syscall) {
     save_globals(s);
     rtl_hostcall(s, HOSTCALL_EXIT, NULL, &cpu.gpr[4]._32, NULL, 0); // gpr[4] is $v0
     longjmp_exec(NEMU_EXEC_END);
+    
+    #ifdef CONFIG_SHARE
+      cosim_end = 1;
+    #endif
+    
   }else{
     rtl_li(s, s1, s->pc);
     rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_SYS);

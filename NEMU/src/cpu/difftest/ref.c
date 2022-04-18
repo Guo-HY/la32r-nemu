@@ -90,6 +90,12 @@ void difftest_raise_intr(word_t NO) {
   isa_difftest_raise_intr(NO);
 }
 
+int difftest_cosim_end() {
+  return isa_difftest_cosim_end();
+}
+
+
+
 void difftest_init() {
   init_mem();
 

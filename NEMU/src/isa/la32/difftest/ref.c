@@ -135,3 +135,7 @@ void isa_difftest_estat_sync(uint32_t index, uint32_t mask) {
   ESTAT->val = (ESTAT->val & ~mask) | (index & mask);
   // ESTAT->val = index;
 }
+
+int isa_difftest_cosim_end() {
+  return cosim_end;
+}

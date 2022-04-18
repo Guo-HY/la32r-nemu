@@ -2,6 +2,7 @@
 #include <memory/paddr.h>
 #include "local-include/csr.h"
 #include "local-include/mmu.h"
+#include "local-include/intr.h"
 
 //load some inst for test
 static const uint32_t img [] = {
@@ -20,6 +21,7 @@ static void restart() {
 
 
 void init_isa() {
+  cosim_end = 0;
   printf("####### INIT HERE ########\n");
   printf("TLB_ENTRY = %d\n",CONFIG_TLB_ENTRIES);
   init_csr();

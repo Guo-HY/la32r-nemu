@@ -28,5 +28,6 @@
 #define PRIV_IDLE 2
 
 word_t raise_intr(uint32_t ecode, vaddr_t epc);
+int cosim_end;
 
 #endif
