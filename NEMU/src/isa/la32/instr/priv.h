@@ -6,14 +6,12 @@ def_EHelper(syscall) {
   // printf("PC: 0x%x [DEBUG]: this is syscall\n",cpu.pc);
   if(id_src1->imm == 0x11){
     printf("This is syscall 0x11, end\n");
+    cosim_end = 1;
+
     // end
     save_globals(s);
     rtl_hostcall(s, HOSTCALL_EXIT, NULL, &cpu.gpr[4]._32, NULL, 0); // gpr[4] is $v0
     longjmp_exec(NEMU_EXEC_END);
-    
-    #ifdef CONFIG_SHARE
-      cosim_end = 1;
-    #endif
     
   }else{
     rtl_li(s, s1, s->pc);

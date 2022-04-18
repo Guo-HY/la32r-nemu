@@ -98,6 +98,23 @@ void tlbrd(){
     TLBELO1->plv = tlb[TLBIDX->index].lo[1].PLV;
     TLBELO1->mat = tlb[TLBIDX->index].lo[1].MAT;
     TLBELO1->ppn = tlb[TLBIDX->index].lo[1].PPN;    
+  }else{
+    TLBEHI->vppn = 0;//tlb[TLBIDX->index].hi.VPPN;
+    TLBIDX->ps = 0;//tlb[TLBIDX->index].hi.PS;
+    ASID->asid = 0;//tlb[TLBIDX->index].hi.ASID;
+
+    TLBELO0->g = 0;//TLBELO1->g = tlb[TLBIDX->index].hi.G;
+    TLBELO0->v = 0;//tlb[TLBIDX->index].lo[0].V;
+    TLBELO0->d = 0;//tlb[TLBIDX->index].lo[0].D;
+    TLBELO0->plv = 0;//tlb[TLBIDX->index].lo[0].PLV;
+    TLBELO0->mat = 0;//tlb[TLBIDX->index].lo[0].MAT;
+    TLBELO0->ppn = 0;//tlb[TLBIDX->index].lo[0].PPN;
+
+    TLBELO1->v = 0;//tlb[TLBIDX->index].lo[1].V;
+    TLBELO1->d = 0;//tlb[TLBIDX->index].lo[1].D;
+    TLBELO1->plv = 0;//tlb[TLBIDX->index].lo[1].PLV;
+    TLBELO1->mat = 0;//tlb[TLBIDX->index].lo[1].MAT;
+    TLBELO1->ppn = 0;//tlb[TLBIDX->index].lo[1].PPN;       
   }
   TLBIDX->ne = ~(tlb[TLBIDX->index].hi.E);
 }
