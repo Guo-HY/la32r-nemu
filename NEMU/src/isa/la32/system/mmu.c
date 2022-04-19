@@ -110,6 +110,7 @@ void tlbrd(){
     TLBELO0->mat = 0;//tlb[TLBIDX->index].lo[0].MAT;
     TLBELO0->ppn = 0;//tlb[TLBIDX->index].lo[0].PPN;
 
+    TLBELO1->g = 0;
     TLBELO1->v = 0;//tlb[TLBIDX->index].lo[1].V;
     TLBELO1->d = 0;//tlb[TLBIDX->index].lo[1].D;
     TLBELO1->plv = 0;//tlb[TLBIDX->index].lo[1].PLV;
