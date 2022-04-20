@@ -43,7 +43,7 @@ https://github.com/OpenXiangShan/xs-env/blob/master/setup-tools.shru
 
 3、进入 `NEMU` 主目录之后，可以进行编译，输入以下命令完成一次编译：
 ```shell
-make la32-primary_defconfig   // 导入配置文件
+make la32-reduced_defconfig   // 导入配置文件
 make
 ```
 （当然也可以使用 `make menuconfig` 进入图形化界面手动配置，但是不推荐，一方面是不好用，一方面是已经准备好了配置文件，一方面是很多配置组合并没有测试过）
@@ -66,7 +66,7 @@ resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large inte
 
 如果你没有再看到其他报错，那么 `NEMU` 的可执行文件 `la32-nemu-interpreter` 就已经在 `.build` 之中喇。
 
-如果你需要使用 NEMU 进行差分测试，那么将导入的配置文件替换为 `la32-primary-ref_defconfig` 之后再 `make`，生成的动态链接库文件 `la32-nemu-interpreter-so` 也会在 `.build` 之中。
+如果你需要使用 NEMU 进行差分测试，那么将导入的配置文件替换为 `la32-reduced-ref_defconfig` 之后再 `make`，生成的动态链接库文件 `la32-nemu-interpreter-so` 也会在 `.build` 之中。
 
 ## **加载程序并运行**
 `NEMU` 有两种方法加载程序，第一种，是将程序的 `.bin` 文件作为参数，在运行程序时传入，如：
@@ -115,7 +115,7 @@ resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large inte
 在执行了 `nemu_trap: 0x80000000` 这条指令之后，`NEMU` 会判断当前保存返回值的 `a0` 寄存器内容是否为 0 ，是则显示 `HIT GOOD TRAP` 否则显示 `HIT BAD TRAP`。由于尚未实现配套的 `AM` ，`NEMU` 执行程序时大概率都会显示 `HIT BAD TRAP`，但这不代表一定错误地执行了程序。
 
 ## **对配置文件的说明**
-与 `LA32` 相关的配置文件有两个：`la32-primary_defconfig` 和 `la32-primary-ref_defconfig`， 位于 `NEMU/configs` 中。前者用于编译产生可执行文件，后者用于编译产生动态链接库。请不要随意修改两者的内容。
+与 `LA32` 相关的配置文件有两个：`la32-reduced_defconfig` 和 `la32-reduced-ref_defconfig`， 位于 `NEMU/configs` 中。前者用于编译产生可执行文件，后者用于编译产生动态链接库。请不要随意修改两者的内容。
 
 如果你需要配置 `TLB` 表项的数目，可以在配置文件中找到并修改 `CONFIG_TLB_ENTRIES` 一项。如果超过32项，就需要再修改 `CSR` 寄存器 `TLBIDX` 的 `index` 位域的宽度以及 `TLBIDX_W_MASK` 了。
 
