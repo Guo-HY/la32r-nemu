@@ -113,6 +113,7 @@ warning: ‘vaddr_read_cross_page’ defined but not used
 ## 其他
 * 《龙芯架构32位精简版参考手册》可以从龙芯官网下载。https://www.loongson.cn/FileShow
 * `LA32R` 相关工具链请前往龙芯官方的 Chiplab 仓库下载 https://gitee.com/loongson-edu/chiplab
+* `LA32R` 的 `difftest` 框架会在龙芯官方的 Chiplab 仓库中公布，敬请期待。
 * 目前 `NEMU` 在打印指令的操作数时会有一些不准确、操作数顺序与汇编文件不一样的情况，这是打印的问题，暂时懒得改。
 * 目前 `NEMU` 打印的 `PC` 有一些是 “下一条待执行的指令的 `PC`”，有一些是 “本条已执行的指令的 `PC`”，相信聪明的你一定可以辨别。
 * 目前 `NEMU` 的基本功能正确，在不实现 `RDCNTV{L/H}.W、RDCNTID` 指令的情况下可以正确执行 `coremark` 。但 `NEMU` 尚未经过充分的随机指令测试，如果你发现了 bug 或者其他问题，请提出 Issue 或者联系我： wangweitong18@mails.ucas.ac.cn
