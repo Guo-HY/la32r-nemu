@@ -11,8 +11,8 @@ config ISA_riscv32
   bool "riscv32"
 config ISA_riscv64
   bool "riscv64"
-config ISA_la32
-  bool "la32"
+config ISA_la32r
+  bool "la32r"
 endchoice
 
 config ISA
@@ -21,7 +21,7 @@ config ISA
   default "mips32" if ISA_mips32
   default "riscv32" if ISA_riscv32
   default "riscv64" if ISA_riscv64
-  default "la32" if ISA_la32
+  default "la32r" if ISA_la32r
   default "none"
 
 config ILEN_MIN
@@ -30,7 +30,7 @@ config ILEN_MIN
   default 4 if ISA_mips32
   default 4 if ISA_riscv32
   default 2 if ISA_riscv64
-  default 4 if ISA_la32
+  default 4 if ISA_la32r
   default 1
 
 config ISA64

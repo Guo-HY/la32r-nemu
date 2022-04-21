@@ -1,7 +1,0 @@
-#include "../instr/compute.h"
-#include "../instr/special.h"
-#include "../instr/control.h"
-#include "../instr/ldst.h"
-#include "../instr/csr_op.h"
-#include "../instr/priv.h"
-#include "../instr/timer.h"

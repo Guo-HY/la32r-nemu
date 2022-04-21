@@ -6,8 +6,8 @@
 # CONFIG_ISA_mips32 is not set
 # CONFIG_ISA_riscv32 is not set
 # CONFIG_ISA_riscv64 is not set
-CONFIG_ISA_la32=y
-CONFIG_ISA="la32"
+CONFIG_ISA_la32r=y
+CONFIG_ISA="la32r"
 CONFIG_ILEN_MIN=4
 # CONFIG_MODE_USER is not set
 

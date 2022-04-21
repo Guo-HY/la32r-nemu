@@ -1,8 +1,8 @@
 # **基于NEMU实现的LoongArch32-Reduced模拟器**
 ## **介绍与概况**
-本项目基于目前已经开源的 `NEMU` 模拟器，向其中移植龙芯架构32位精简版，即 `LoongArch32-Reduced`(以下简称为 `LA32`)。
+本项目基于目前已经开源的 `NEMU` 模拟器，向其中移植龙芯架构32位精简版，即 `LoongArch32-Reduced`(以下简称为 `LA32R`)。
 
-为了向 `LA32` 的开发者、学习者、爱好者、<s>靠它毕业者</s>提供一个类似于 ysyx 项目中的 `difftest` 环境，我产生了向 `NEMU` 中移植 `LA32` ，之后复用 `difftest` 框架的想法。于是该项目诞生了。<s>为了让更多的朋友帮忙找bug</s>为了向更多的朋友分享，在与汪老师沟通后，我们选择开源本项目。
+为了向 `LA32R` 的开发者、学习者、爱好者、<s>靠它毕业者</s>提供一个类似于 ysyx 项目中的 `difftest` 环境，我产生了向 `NEMU` 中移植 `LA32R` ，之后复用 `difftest` 框架的想法。于是该项目诞生了。<s>为了让更多的朋友帮忙找bug</s>为了向更多的朋友分享，在与汪老师沟通后，我们选择开源本项目。
 
 目前 `NEMU` 本体有两个organizations可以选择：
 ```
@@ -43,37 +43,30 @@ https://github.com/OpenXiangShan/xs-env/blob/master/setup-tools.shru
 
 3、进入 `NEMU` 主目录之后，可以进行编译，输入以下命令完成一次编译：
 ```shell
-make la32-reduced_defconfig   // 导入配置文件
+make la32-reduced-ref_defconfig   // 导入配置文件
 make
 ```
 （当然也可以使用 `make menuconfig` 进入图形化界面手动配置，但是不推荐，一方面是不好用，一方面是已经准备好了配置文件，一方面是很多配置组合并没有测试过）
 
-在编译过程中，你应该会看到四处 `WARNING`:
+在编译过程中，你应该会看到两处 `WARNING`:
 
-第一二处 be like
+be like
 ```
 warning: ‘vaddr_write_cross_page’ defined but not used
 warning: ‘vaddr_read_cross_page’ defined but not used
 ```
-这两个函数是用来处理 `riscv` 中，16bit 压缩指令可能导致的跨页读写问题。`LA32` 中不存在这个问题，忽略之。
+这两个函数是用来处理 `riscv` 中，16bit 压缩指令可能导致的跨页读写问题。`LA32R` 中不存在这个问题，忽略之。
 
-第三四处 be like
-```shell
-resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large integer implicitly truncated to unsigned type
-resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large integer implicitly truncated to unsigned type
-```
-这是软件模拟浮点运算的相关代码，浮点指令没有实现，不用管。（并不明白为啥这里会报警告）
+如果你没有再看到其他报错，生成的动态链接库文件 `la32r-nemu-interpreter-so` 就在 `.build` 之中了。
 
-如果你没有再看到其他报错，那么 `NEMU` 的可执行文件 `la32-nemu-interpreter` 就已经在 `.build` 之中喇。
-
-如果你需要使用 NEMU 进行差分测试，那么将导入的配置文件替换为 `la32-reduced-ref_defconfig` 之后再 `make`，生成的动态链接库文件 `la32-nemu-interpreter-so` 也会在 `.build` 之中。
+如果你想将NEMU编译为可执行文件，那么将配置文件换为 `la32-reduced_defconfig`，编译出的可执行文件 `la32r-nemu-interpreter` 就在`.build` 之中了。
 
 ## **加载程序并运行**
 `NEMU` 有两种方法加载程序，第一种，是将程序的 `.bin` 文件作为参数，在运行程序时传入，如：
 ```
-./la32-nemu-interpreter ../../../coremark.bin
+./la32r-nemu-interpreter ../../../coremark.bin
 ```
-第二种方式是运行程序时不附带任何参数，这时候 `NEMU` 会将 `NEMU/src/isa/la32/init.c` 中的 `img` 数组中的内容拷贝到 `RESET_PC` 开始执行。可以手动将一些指令编入 `img` 数组中，这在调试的时候非常方便。
+第二种方式是运行程序时不附带任何参数，这时候 `NEMU` 会将 `NEMU/src/isa/la32r/init.c` 中的 `img` 数组中的内容拷贝到 `RESET_PC` 开始执行。可以手动将一些指令编入 `img` 数组中，这在调试的时候非常方便。
 
 ### **NEMU部分命令的使用说明**
 
@@ -104,33 +97,24 @@ resource/softfloat/repo/source/8086-SSE/specialize.h:158:35: warning: large inte
 我使用的 `workload` 都来自于龙芯的 `chiplab` 仓库：https://gitee.com/loongson-edu/chiplab
 
 如果你也想利用龙芯的 `chiplab` 仓库里的 `func`，这里做出如下说明：
-* 龙芯的 `chiplab` 仓库于 `2021.12.3` 进行了更新，请使用最新的仓库。
+* 请使用最新的仓库。
 * `chiplab/software/func` 中的 `lab16` 测试实现为 `nop` 的指令，没有在 `NEMU` 上运行的必要。建议运行 `lab16` 及之前的功能测试。
 * `chiplab/software/func` 中的功能测试都是用汇编写的，不存在数据段。但是要注意，`NEMU` 来模拟 `IDLE_1s` 会很慢，请注释掉。另外，涉及到 `NEMU` 没有实现的功能的测试项，也建议注释掉（如 `IDLE` 指令测试，时钟中断测试等）
 * 对于其他C程序，如 `coremark`，为了将数据段放在代码段后面，请将 `chiplab/toolchains/system_newlib/pmon.ld` 的第81行   `. = 0x1000;`    注释掉，并且在产生 `.bin` 文件时, `objcopy` 所有的 `section`。
 
-也可以直接使用本项目编译好的 `main_lab14.bin`，注意它去掉了 `n49_ti_ex_test n58_ti_ex_idle_test n59_rdcnt_test` 这三项。
-
 ### **“对Hit xxx Trap”的说明** 
-在执行了 `nemu_trap: 0x80000000` 这条指令之后，`NEMU` 会判断当前保存返回值的 `a0` 寄存器内容是否为 0 ，是则显示 `HIT GOOD TRAP` 否则显示 `HIT BAD TRAP`。由于尚未实现配套的 `AM` ，`NEMU` 执行程序时大概率都会显示 `HIT BAD TRAP`，但这不代表一定错误地执行了程序。
+在执行了 `nemu_trap: 0x80000000` 这条指令或者 `syscall 0x11` 之后，`NEMU` 会停止执行并判断当前保存返回值的 `a0` 寄存器内容是否为 0 ，是则显示 `HIT GOOD TRAP` 否则显示 `HIT BAD TRAP`。显示 `HIT BAD TRAP`不代表一定错误地执行了程序。
 
 ## **对配置文件的说明**
-与 `LA32` 相关的配置文件有两个：`la32-reduced_defconfig` 和 `la32-reduced-ref_defconfig`， 位于 `NEMU/configs` 中。前者用于编译产生可执行文件，后者用于编译产生动态链接库。请不要随意修改两者的内容。
+与 `LA32R` 相关的配置文件有两个：`la32-reduced_defconfig` 和 `la32-reduced-ref_defconfig`， 位于 `NEMU/configs` 中。前者用于编译产生可执行文件，后者用于编译产生动态链接库。请不要随意修改两者的内容。
 
 如果你需要配置 `TLB` 表项的数目，可以在配置文件中找到并修改 `CONFIG_TLB_ENTRIES` 一项。如果超过32项，就需要再修改 `CSR` 寄存器 `TLBIDX` 的 `index` 位域的宽度以及 `TLBIDX_W_MASK` 了。
 
-## **《龙芯架构32位精简版参考手册》中写得不清楚的地方**
-**本节内容仅为个人理解，对指令集的最终解释归龙芯中科所有！**
-* `P51 6.1.1 中断类型`，描述为一共有 12 个中断，但是 `ESTAT.IS` 域有13位，并没有说明差一个差在哪，哪一位是不用的。对比了完整手册，实际上 `ESTAT.IS[10]` 是性能监测计数溢出中断，在 `LA32` 精简版中是没有这个中断的，应当始终为0。
-* 只有在用到 `TLB` 进行地址翻译的时候，才会触发虚地址最高位为 1 的地址错例外 `ADE`。
-* 手册中规定，物理地址最大可实现为 36 位，因此才会出现 `PPN` 在 `CSR` 寄存器中是24位，在 `TLB` 表项中是20位的问题。`NEMU` 实现位32位物理地址，故 `PPN` 在 `CSR` 寄存器中高4位是0。
-* 对于 `TLBRD` 指令读出无效 `TLB` 表项的情况，手册中的描述是：“建议不更新 `CSR` 寄存器或全置为0”，本项目选择了不更新的实现。
-* 手册中说 `syscall` `break` 指令编码时可以编一个参数进去，但并没有说这个参数怎么传递。实际上完全可以忽视这个参数不管。
 ## 其他
 * 《龙芯架构32位精简版参考手册》可以从龙芯官网下载。https://www.loongson.cn/FileShow
-* `LA32` 相关工具链请前往龙芯官方的 Chiplab 仓库下载 https://gitee.com/loongson-edu/chiplab
+* `LA32R` 相关工具链请前往龙芯官方的 Chiplab 仓库下载 https://gitee.com/loongson-edu/chiplab
 * 目前 `NEMU` 在打印指令的操作数时会有一些不准确、操作数顺序与汇编文件不一样的情况，这是打印的问题，暂时懒得改。
 * 目前 `NEMU` 打印的 `PC` 有一些是 “下一条待执行的指令的 `PC`”，有一些是 “本条已执行的指令的 `PC`”，相信聪明的你一定可以辨别。
 * 目前 `NEMU` 的基本功能正确，在不实现 `RDCNTV{L/H}.W、RDCNTID` 指令的情况下可以正确执行 `coremark` 。但 `NEMU` 尚未经过充分的随机指令测试，如果你发现了 bug 或者其他问题，请提出 Issue 或者联系我： wangweitong18@mails.ucas.ac.cn
-* 由于 ysyx 的 `NEMU` 项目本身并没有任何的开源许可证，在与 ysyx 的王华强学长交流后，本项目只开源与 `LA32` 实现相关的源代码，其他架构的代码不包含在本项目中，但也请**不要删除** `NEMU/src/isa` 下的其他文件夹。
+* 由于 ysyx 的 `NEMU` 项目本身并没有任何的开源许可证，在与 ysyx 的王华强学长交流后，本项目只开源与 `LA32R` 实现相关的源代码，其他架构的代码不包含在本项目中，但也请**不要删除** `NEMU/src/isa` 下的其他文件夹。
 * 目前本项目和开源仓库仅由我一个人开发管理，这也是我正式开源并管理的第一个仓库，不当之处还请各位不吝赐教，谢谢大家看到这里。
