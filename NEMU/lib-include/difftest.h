@@ -13,7 +13,7 @@ enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 #elif defined(__ISA_mips32__)
 # define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 38) // GRPs + status + lo + hi + badvaddr + cause + pc
 #elif defined(__ISA_la32r__)
-# define DIFFTEST_REG_SIZE (sizeof(uint32_t) * (33 + 27)) //GPS + PC + other csrs
+# define DIFFTEST_REG_SIZE (sizeof(uint32_t) * (33 + 23)) //GPS + PC + other csrs
 #elif defined(__ISA_riscv32__)
 # define DIFFTEST_REG_SIZE (sizeof(uint32_t) * 33) // GRPs + pc
 #elif defined(__ISA_riscv64__)
