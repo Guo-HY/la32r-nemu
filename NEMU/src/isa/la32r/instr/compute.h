@@ -71,19 +71,39 @@ def_EHelper(mulh_wu) {
 }
 
 def_EHelper(div_w) {
-    rtl_divs_q(s, ddest, dsrc1, dsrc2);
+    if(*dsrc2 == 0){
+      printf("[NEMU]: divide zero occur on div.w, PC:0x%x , nemu abort to avoid fault, please check!!!\n",s->pc);
+      assert(*dsrc2 != 0);
+    }else{
+      rtl_divs_q(s, ddest, dsrc1, dsrc2);
+    }
 }
 
 def_EHelper(div_wu) {
-    rtl_divu_q(s, ddest, dsrc1, dsrc2);
+    if(*dsrc2 == 0){
+      printf("[NEMU]: divide zero occur on div.wu, PC:0x%x , nemu abort to avoid fault, please check!!!\n",s->pc);
+      assert(*dsrc2 != 0);
+    }else{
+      rtl_divu_q(s, ddest, dsrc1, dsrc2);
+    }
 }
 
 def_EHelper(mod_w) {
-    rtl_divs_r(s, ddest, dsrc1, dsrc2);
+    if(*dsrc2 == 0){
+      printf("[NEMU]: divide zero occur on mod.w, PC:0x%x , nemu abort to avoid fault, please check!!!\n",s->pc);
+      assert(*dsrc2 != 0);
+    }else{
+      rtl_divs_r(s, ddest, dsrc1, dsrc2);
+    }
 }
 
 def_EHelper(mod_wu) {
-    rtl_divu_r(s, ddest, dsrc1, dsrc2);
+    if(*dsrc2 == 0){
+      printf("[NEMU]: divide zero occur on mod.wu, PC:0x%x , nemu abort to avoid fault, please check!!!\n",s->pc);
+      assert(*dsrc2 != 0);
+    }else{
+      rtl_divu_r(s, ddest, dsrc1, dsrc2);
+    }
 }
 
 /*******************************************************/
