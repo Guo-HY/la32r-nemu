@@ -26,9 +26,9 @@ static void csr_prepare() {
   cpu.save1 = SAVE1->val;
   cpu.save2 = SAVE2->val;
   cpu.save3 = SAVE3->val;
-  // cpu.tid = TID->val;
-  // cpu.tcfg = TCFG->val;
-  // cpu.tval = TVAL->val;
+  cpu.tid = TID->val;
+  cpu.tcfg = TCFG->val;
+  cpu.tval = TVAL->val;
   // cpu.ticlr = TICLR->val;
   cpu.llbctl = csrid_read(0x60); 
   cpu.tlbrentry = TLBRENTRY->val;
@@ -56,9 +56,9 @@ static void csr_writeback() {
   SAVE1->val = cpu.save1;
   SAVE2->val = cpu.save2;
   SAVE3->val = cpu.save3;
-  // TID->val = cpu.tid;
-  // TCFG->val = cpu.tcfg;
-  // TVAL->val = cpu.tval;
+  TID->val = cpu.tid;
+  TCFG->val = cpu.tcfg;
+  TVAL->val = cpu.tval;
   // TICLR->val = cpu.ticlr;
   LLBCTL->val = cpu.llbctl;
   TLBRENTRY->val = cpu.tlbrentry;

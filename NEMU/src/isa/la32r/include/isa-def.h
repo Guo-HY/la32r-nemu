@@ -15,7 +15,7 @@ typedef struct {
   rtlreg_t tlbidx, tlbehi, tlbelo0, tlbelo1;
   rtlreg_t asid, pgdl, pgdh;
   rtlreg_t save0, save1, save2, save3;
-  // rtlreg_t tid, tcfg, tval, ticlr;
+  rtlreg_t tid, tcfg, tval;//, ticlr;
   rtlreg_t llbctl, tlbrentry, dmw0, dmw1;
   rtlreg_t estat;
   vaddr_t idle_pc;
