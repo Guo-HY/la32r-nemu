@@ -4,7 +4,9 @@
 
 为了向 `LA32R` 的开发者、学习者、爱好者、<s>靠它毕业者</s>提供一个类似于 ysyx 项目中的 `difftest` 环境，我产生了向 `NEMU` 中移植 `LA32R` ，之后复用 `difftest` 框架的想法。于是该项目诞生了。<s>为了让更多的朋友帮忙找bug</s>为了向更多的朋友分享，在与汪老师沟通后，我们选择开源本项目。
 
-目前 `NEMU` 本体有两个organizations可以选择：
+ `NEMU` 模拟器是一个轻量级的指令集模拟器，运行效果相当于一个单周期CPU。
+
+目前 `NEMU` 本体有两个organizations：
 ```
 git clone https://github.com/OpenXiangShan/NEMU.git
 git clone https://github.com/OSCPU/nemu.git
@@ -26,18 +28,16 @@ git clone https://github.com/OSCPU/nemu.git
 * 配套的 `AM` （裸机运行时环境）：尚未实现。理由同上
 
 ### **一些特殊实现的说明**
-* 由于没有实现缓存，故与缓存相关的指令：`IBAR DBAR PRELD CACOP` 均实现为了 `NOP`，但是 `CACOP` 指令会触发与之相关的指令特权等级错例外（`IPE`）。
+* 由于没有实现缓存，故与缓存相关的指令：`IBAR DBAR PRELD CACOP` 均实现为了 `NOP`，但是 `CACOP` 指令会触发与之相关的指令特权等级错例外（`IPE`）和 `TLB` 例外。
 * 与计时器和定时器相关的指令 `RDCNTV{L/H}.W、RDCNTID` 以及读 `TVAL` 寄存器的 `CSR` 指令，是需要从CPU端获取数据的。在单独运行 `NEMU` 的时候，都会读到 0 或者不确定的值。
 * `IDLE` 指令实现为了自己跳转到自己，单独运行 `NEMU` 的时候不会产生时钟中断和硬件中断，所以会陷入死循环。
 * 实现了两条只对 NEMU 可见的指令：`nemu_trap: 0x80000000`， `print_led: 0xc0000000`。前一条指令用于让 `NEMU` 停止执行，在没有运行时环境支持进程正常退出的情况下，需要在运行的程序中手动编入这条指令来让 `NEMU` 停止工作；后一条指令在运行 `chiplab` 中提供的测试 func 时有用，效果是打印寄存器 `R12` 中的值，即模仿龙芯杯比赛中，试验箱上数码管显示的结果，形如 `XX0000XX`，最左边一字节显示当前的测试点编号，最右边一字节显示当前通过的测试点数目，最左一字节和最右一字节不同的时候就意味着有测试点没有通过。
 * 时钟中断、硬件中断信号均需要从CPU端获取，单独运行 `NEMU` 的时候，都不会触发。
+* 对于软中断(`Soft Int`)，目前 `NEMU` 的实现是，中断例外标志会携带在导致软中断信号拉高的指令(一般是写入 `CSR` 寄存器的指令)的下一条指令上，也就是说，软中断信号一旦拉高， `NEMU` 就会立即进入例外处理。实际上 `LA32R` 手册中是没有要求必须要在软中断信号拉高时立即进入中断处理的，但由于 `NEMU` 并没有流水线结构，所以会立即进入中断处理。
 * `CSR` 寄存器 `CPUID` 不能写入，读出永远为 0 。
 
 ## **编译运行**
-1、首先需要安装依赖。由于本项目是从 ysyx 项目中的 NEMU 移植而来，所以请按照 ysyx 的标准安装依赖：
-https://github.com/OpenXiangShan/xs-env/blob/master/setup-tools.shru
-
-也可以不根据以上链接安装依赖。在编译的过程中手动安装缺失的库（如libreadline等）即可。
+1、首先需要安装依赖。在编译的过程中手动安装缺失的库（如libreadline，sdl2等）即可。
 
 2、完成依赖安装之后，需要设置环境变量：`export NEMU_HOME=...`，设置为 `NEMU` 主目录。
 
@@ -113,7 +113,7 @@ warning: ‘vaddr_read_cross_page’ defined but not used
 ## 其他
 * 《龙芯架构32位精简版参考手册》可以从龙芯官网下载。https://www.loongson.cn/FileShow
 * `LA32R` 相关工具链请前往龙芯官方的 Chiplab 仓库下载 https://gitee.com/loongson-edu/chiplab
-* `LA32R` 的 `difftest` 框架会在龙芯官方的 Chiplab 仓库中公布，敬请期待。
+* `LA32R` 的 `difftest` 框架会在龙芯官方的 Chiplab 仓库中公布，详见 Chiplab 仓库的 `chiplab_diff` 分支。
 * 目前 `NEMU` 在打印指令的操作数时会有一些不准确、操作数顺序与汇编文件不一样的情况，这是打印的问题，暂时懒得改。
 * 目前 `NEMU` 打印的 `PC` 有一些是 “下一条待执行的指令的 `PC`”，有一些是 “本条已执行的指令的 `PC`”，相信聪明的你一定可以辨别。
 * 目前 `NEMU` 的基本功能正确，在不实现 `RDCNTV{L/H}.W、RDCNTID` 指令的情况下可以正确执行 `coremark` 。但 `NEMU` 尚未经过充分的随机指令测试，如果你发现了 bug 或者其他问题，请提出 Issue 或者联系我： wangweitong18@mails.ucas.ac.cn
