@@ -1,17 +1,17 @@
 # **基于NEMU实现的LoongArch32-Reduced模拟器**
 ## **介绍与概况**
-本项目基于目前已经开源的 `NEMU` 模拟器，向其中移植龙芯架构32位精简版，即 `LoongArch32-Reduced`(以下简称为 `LA32R`)。
+本项目基于南京大学的 [NEMU](https://github.com/NJU-ProjectN/nemu) 项目，向其中移植了龙芯架构32位精简版的支持，即 `LoongArch32-Reduced`(以下简称为 `LA32R`)。
 
-为了向 `LA32R` 的开发者、学习者、爱好者、<s>靠它毕业者</s>提供一个类似于 ysyx 项目中的 `difftest` 环境，我产生了向 `NEMU` 中移植 `LA32R` ，之后复用 `difftest` 框架的想法。于是该项目诞生了。<s>为了让更多的朋友帮忙找bug</s>为了向更多的朋友分享，在与汪老师沟通后，我们选择开源本项目。
+为了向 `LA32R` 的开发者、学习者、爱好者以及“龙芯杯”大赛提供一个类似于一生一芯项目中的 `difftest` 环境，我产生了向 `NEMU` 中移植 `LA32R` ，之后基于 `difftest` 框架实现 `LA32R difftest` 的想法。于是该项目诞生了。
 
  `NEMU` 模拟器是一个轻量级的指令集模拟器，运行效果相当于一个单周期CPU。
 
-目前 `NEMU` 本体有两个organizations：
+参照一生一芯项目，目前可以用于difftest的 `NEMU` 有两个organizations：
 ```
 git clone https://github.com/OpenXiangShan/NEMU.git
 git clone https://github.com/OSCPU/nemu.git
 ```
-前者是上游，但本项目目前是基于后者来进行移植的，将来会切换到前者。
+前者是上游，但本项目目前是基于后者来进行移植的。
 
 ## **实现规模**
 本项目按照《龙芯架构32位精简版参考手册》实现，目前已经实现了：
@@ -117,5 +117,5 @@ warning: ‘vaddr_read_cross_page’ defined but not used
 * 目前 `NEMU` 在打印指令的操作数时会有一些不准确、操作数顺序与汇编文件不一样的情况，这是打印的问题，暂时懒得改。
 * 目前 `NEMU` 打印的 `PC` 有一些是 “下一条待执行的指令的 `PC`”，有一些是 “本条已执行的指令的 `PC`”，相信聪明的你一定可以辨别。
 * 目前 `NEMU` 的基本功能正确，在不实现 `RDCNTV{L/H}.W、RDCNTID` 指令的情况下可以正确执行 `coremark` 。但 `NEMU` 尚未经过充分的随机指令测试，如果你发现了 bug 或者其他问题，请提出 Issue 或者联系我： wangweitong18@mails.ucas.ac.cn
-* 由于 ysyx 的 `NEMU` 项目本身并没有任何的开源许可证，在与 ysyx 的王华强学长交流后，本项目只开源与 `LA32R` 实现相关的源代码，其他架构的代码不包含在本项目中，但也请**不要删除** `NEMU/src/isa` 下的其他文件夹。
+* 由于 `NEMU` 项目本身并没有任何的开源许可证，所以本仓库也暂时没有许可证。在与一生一芯的王华强学长交流后，本项目只保留了 `src/isa` 目录下与 `LA32R` 实现相关的源代码，其他架构的代码不包含在本项目中，但也请**不要删除** `NEMU/src/isa` 下的其他文件夹。
 * 目前本项目和开源仓库仅由我一个人开发管理，这也是我正式开源并管理的第一个仓库，不当之处还请各位不吝赐教，谢谢大家看到这里。
