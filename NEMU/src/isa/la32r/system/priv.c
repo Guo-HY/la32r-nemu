@@ -183,7 +183,7 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
   switch (id) {
     case HOSTCALL_CSR: 
       if(CRMD->plv == 0x3){
-        printf("PC: 0x%x [NEMU]: this is CSR inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+        // printf("PC: 0x%x [NEMU]: this is CSR inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
         longjmp_exception(EX_IPE);
       }else{
           csrrw(dest, src1, imm); 
@@ -194,7 +194,7 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
       break;
     case HOSTCALL_PRIV: 
       if(CRMD->plv == 0x3){
-        printf("PC: 0x%x [NEMU]: this is PRIV inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+        // printf("PC: 0x%x [NEMU]: this is PRIV inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
         longjmp_exception(EX_IPE);
       }else{
           ret = priv_instr(imm, src1);
@@ -202,7 +202,7 @@ void isa_hostcall(uint32_t id, rtlreg_t *dest, const rtlreg_t *src1,
       break;
     case HOSTCALL_TLB:
       if(CRMD->plv == 0x3){
-        printf("PC: 0x%x [NEMU]: this is TLB inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+        // printf("PC: 0x%x [NEMU]: this is TLB inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
         longjmp_exception(EX_IPE);
       }else{
         switch (imm) {

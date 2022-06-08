@@ -256,7 +256,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         }
       }
       if(match_tlb == 0){
-        printf("PC: 0x%x [NEMU]: EXCEOTION TLBR\n",cpu.pc);  
+        // printf("PC: 0x%x [NEMU]: EXCEPTION TLBR\n",cpu.pc);  
         BADV->val = vaddr;
         TLBEHI->vppn = vaddr >> 13;
         longjmp_exception(EX_TLBR); 
@@ -266,30 +266,30 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       }else if(match_tlb == 1){
         if(tlb[matched_tlb_index].lo[even_or_odd].V == 0){
           if(type == MEM_TYPE_IFETCH){
-            printf("PC: 0x%x [NEMU]: EXCEOTION PIF\n",cpu.pc);  
+            // printf("PC: 0x%x [NEMU]: EXCEPTION PIF\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIF); 
           }else if(type == MEM_TYPE_READ){
-            printf("PC: 0x%x [NEMU]: EXCEOTION PIL\n",cpu.pc);  
+            // printf("PC: 0x%x [NEMU]: EXCEPTION PIL\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIL); 
           }else if(type == MEM_TYPE_WRITE){
-            printf("PC: 0x%x [NEMU]: EXCEOTION PIS\n",cpu.pc);  
+            // printf("PC: 0x%x [NEMU]: EXCEPTION PIS\n",cpu.pc);  
             BADV->val = vaddr;
             TLBEHI->vppn = vaddr >> 13;
             longjmp_exception(EX_PIS); 
           }
         }
         if(tlb[matched_tlb_index].lo[even_or_odd].PLV < CRMD->plv){
-          printf("PC: 0x%x [NEMU]: EXCEOTION PPI\n",cpu.pc);  
+          // printf("PC: 0x%x [NEMU]: EXCEPTION PPI\n",cpu.pc);  
           BADV->val = vaddr;
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PPI);          
         }
         if((type == MEM_TYPE_WRITE) && (tlb[matched_tlb_index].lo[even_or_odd].D == 0)){
-          printf("PC: 0x%x [NEMU]: EXCEOTION PME\n",cpu.pc);  
+          // printf("PC: 0x%x [NEMU]: EXCEPTION PME\n",cpu.pc);  
           BADV->val = vaddr;
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PME);          

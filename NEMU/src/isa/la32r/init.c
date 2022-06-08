@@ -21,7 +21,8 @@
 
 //load some inst for test
 static const uint32_t img [] = {
-0x00200022,
+0x1dfffce9,
+0x4fffa920,
 0x80000000 // 	nemu_trap
 
 };

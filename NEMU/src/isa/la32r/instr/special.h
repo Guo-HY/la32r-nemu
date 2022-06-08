@@ -59,7 +59,7 @@ def_EHelper(dbar) {
 
 def_EHelper(cacop) { 
     if((id_src1->imm) & (0x10)){
-        printf("PC: 0x%x [NEMU]: this is CACOP HIT inst.\n",cpu.pc);
+        // printf("PC: 0x%x [NEMU]: this is CACOP HIT inst.\n",cpu.pc);
         vaddr_t addr = *ddest + id_src2->simm ;
         isa_mmu_translate(addr, 4,MEM_TYPE_READ);
     }
@@ -68,7 +68,7 @@ def_EHelper(cacop) {
       if((id_src1->imm) & (0x10)){
         //printf("PC: 0x%x [DEBUG]: this is CACOP HIT inst.\n",cpu.pc);
       }else{
-        printf("PC: 0x%x [NEMU]: this is CACOP inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
+        // printf("PC: 0x%x [NEMU]: this is CACOP inst but plv is %d, exception.\n",cpu.pc,CRMD->plv);
         longjmp_exception(EX_IPE);
       }
     }
