@@ -22,6 +22,8 @@
 #include "../local-include/intr.h"
 #include "../local-include/mmu.h"
 
+struct tlb_struct tlb [CONFIG_TLB_ENTRIES];
+
 void init_mmu() {
   int i;
   for (i = 0; i < CONFIG_TLB_ENTRIES; i ++) {

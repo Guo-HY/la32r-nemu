@@ -142,6 +142,8 @@ void isa_difftest_uarchstatus_cpy(void *dut, bool direction) {
   return ;
 }
 
+uint32_t tlbfill_index_diff;
+
 void isa_difftest_tlbfill_index_set(uint32_t index) {
   tlbfill_index_diff = index;
 }
