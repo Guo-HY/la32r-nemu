@@ -29,7 +29,7 @@ int tlbsrch();
 void tlbrd();
 void invtlb(uint32_t op, uint32_t asid, uint32_t va);
 
-uint32_t tlbfill_index_diff; // tlbfill index from dut when run difftest
+extern uint32_t tlbfill_index_diff; // tlbfill index from dut when run difftest
 
 #pragma pack(8)
 typedef union {
@@ -62,6 +62,6 @@ struct tlb_struct{
   EntryLo lo[2];
 } ;
 
-struct tlb_struct tlb [CONFIG_TLB_ENTRIES];
+extern struct tlb_struct tlb [CONFIG_TLB_ENTRIES];
 
 #endif

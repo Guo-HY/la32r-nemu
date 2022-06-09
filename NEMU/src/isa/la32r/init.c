@@ -35,6 +35,7 @@ static void restart() {
   cpu.gpr[0]._32 = 0;
 }
 
+int cosim_end;
 
 void init_isa() {
   cosim_end = 0;
