@@ -23,7 +23,7 @@ def_EHelper(nemu_trap) {
 }
 
 def_EHelper(print_led) {
-  printf("####  current result: 0x%08x  ####\n", cpu.gpr[12]._32);
+  printf("[NEMU] ####  current result: 0x%08x  ####\n", cpu.gpr[12]._32);
 }
 
 def_EHelper(inv) {
@@ -32,7 +32,7 @@ def_EHelper(inv) {
   // longjmp_exec(NEMU_EXEC_END);
   
   /* FOR RUN FUNC, INVALID INST IS AN EXCEPTION NEED TO HANDLE */
-  printf("PC: 0x%x [NEMU]: INVALID INST\n",s->pc);  
+  printf("[NEMU] PC: 0x%x [NEMU]: INVALID INST\n",s->pc);  
   printf("[NEMU]: INVALID INST CODE : 0x %x\n",s->isa.instr.val);
   rtl_li(s, s1, s->pc);
   rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_INE);
@@ -61,7 +61,7 @@ def_EHelper(cacop) {
     if((id_src1->imm) & (0x10)){
         // printf("PC: 0x%x [NEMU]: this is CACOP HIT inst.\n",cpu.pc);
         vaddr_t addr = *ddest + id_src2->simm ;
-        isa_mmu_translate(addr, 4,MEM_TYPE_READ);
+        isa_mmu_translate(addr, 4, MEM_TYPE_READ);
     }
 
     if(CRMD->plv == 0x3){
@@ -72,5 +72,5 @@ def_EHelper(cacop) {
         longjmp_exception(EX_IPE);
       }
     }
-    printf("this is CACOP instruction\n"); 
+    printf("[NEMU] this is CACOP instruction\n"); 
 }

@@ -20,7 +20,7 @@
 def_EHelper(syscall) {
   // printf("PC: 0x%x [DEBUG]: this is syscall\n",cpu.pc);
   if(id_src1->imm == 0x11){
-    printf("This is syscall 0x11, end\n");
+    printf("[NEMU] This is syscall 0x11, end\n");
     cosim_end = 1;
 
     // end

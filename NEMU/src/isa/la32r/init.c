@@ -39,8 +39,8 @@ int cosim_end;
 
 void init_isa() {
   cosim_end = 0;
-  printf("####### INIT HERE ########\n");
-  printf("TLB_ENTRY = %d\n",CONFIG_TLB_ENTRIES);
+  printf("[NEMU] ####### INIT HERE ########\n");
+  printf("[NEMU] TLB_ENTRY = %d\n",CONFIG_TLB_ENTRIES);
   init_csr();
 
   CRMD->plv  = 0;

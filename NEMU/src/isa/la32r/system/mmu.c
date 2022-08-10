@@ -90,7 +90,7 @@ int tlbsrch(){
   if(find == 0)
     TLBIDX->ne = 1;
   if(find > 1){
-    printf("ERROR: multiple tlb entries searched, please check tlb\n");
+    printf("[NEMU] ERROR: multiple tlb entries searched, please check tlb\n");
     exit(1);
   }
 
@@ -196,7 +196,7 @@ void invtlb(uint32_t op, uint32_t asid, uint32_t va){
     }
     break;
   default:
-    printf("ERROR: Unknown op 0x%x for INVTLB\n",op);
+    printf("[NEMU] ERROR: Unknown op 0x%x for INVTLB\n",op);
     longjmp_exception(EX_INE); 
     break;
   }
@@ -217,7 +217,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       match_dmw1 = 1;    
 
     if(match_dmw0 & match_dmw1){
-      printf("ERROR: both DMW reg matched.\n");
+      printf("[NEMU] ERROR: both DMW reg matched.\n");
       exit(1);
     }else if(match_dmw0){
       return (((DMW0->pseg)<<29) | (vaddr & 0x1fffffff));
@@ -226,7 +226,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
     }else{     // DMW reg not matched, use tlb
 
       if((CRMD->plv == 0x3) && (vaddr & ((vaddr_t)0x80000000))){      
-        printf("PC: 0x%x [NEMU]: current mem addr = 0x%x, user visited high half\n",cpu.pc,vaddr);
+        printf("[NEMU] PC: 0x%x [NEMU]: current mem addr = 0x%x, user visited high half\n",cpu.pc,vaddr);
         if(type == MEM_TYPE_IFETCH){
           ESTAT->esubcode = 0; 
           BADV->val = cpu.pc; // CPU.PC is the same as vaddr here..
@@ -263,7 +263,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         TLBEHI->vppn = vaddr >> 13;
         longjmp_exception(EX_TLBR); 
       }else if(match_tlb > 1){
-        printf("ERROR: multiple tlb entries matched.\n");
+        printf("[NEMU] ERROR: multiple tlb entries matched.\n");
         exit(1);
       }else if(match_tlb == 1){
         if(tlb[matched_tlb_index].lo[even_or_odd].V == 0){
@@ -302,7 +302,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
         }else if(tlb[matched_tlb_index].hi.PS == 21){
           return ((((tlb[matched_tlb_index].lo[even_or_odd].PPN) << 12) & 0xffe00000) | (vaddr & 0x001fffff));
         }else{
-          printf("ERROR: PS != 12 NOR PS != 21, please check tlb\n");
+          printf("[NEMU] ERROR: PS != 12 NOR PS != 21, please check tlb\n");
           exit(1);
         }
       }

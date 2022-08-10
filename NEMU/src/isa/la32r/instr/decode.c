@@ -237,7 +237,7 @@ def_THelper(main) {
 
 int isa_fetch_decode(Decode *s) {
   if(s->snpc & ((vaddr_t)0x3)){
-    printf("PC: 0x%x [NEMU]: inst fetch, PC = 0x%x, not 4 aligned\n", cpu.pc, cpu.pc);
+    printf("[NEMU] PC: 0x%x [NEMU]: inst fetch, PC = 0x%x, not 4 aligned\n", cpu.pc, cpu.pc);
     BADV->val = s->snpc;
     longjmp_exception(EX_ADE); 
   }

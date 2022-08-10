@@ -83,7 +83,7 @@ word_t paddr_read(paddr_t addr, int len) {
 #else
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   else {
-    printf("ERROR: invalid mem read from paddr " FMT_PADDR ", NEMU raise illegal inst exception\n", addr);
+    printf("[NEMU] ERROR: invalid mem read from paddr " FMT_PADDR ", NEMU raise illegal inst exception\n", addr);
   }
   return 0;
 #endif
@@ -96,7 +96,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 #else
   if (likely(in_pmem(addr))) return pmem_write(addr, len, data);
   else {
-    printf("ERROR: invalid mem write to paddr " FMT_PADDR ", NEMU raise illegal inst exception\n", addr);
+    printf("[NEMU] ERROR: invalid mem write to paddr " FMT_PADDR ", NEMU raise illegal inst exception\n", addr);
     return;
   } 
 #endif
@@ -115,7 +115,7 @@ void store_commit_queue_push(uint64_t addr, uint64_t data, int len) {
   store_commit_t *commit = store_commit_queue + tail;
   if(commit->valid){ // store commit queue overflow
     overflow = 1;
-    printf("[WARNING] difftest store queue overflow, difftest store commit disabled\n");
+    printf("[NEMU] [WARNING] difftest store queue overflow, difftest store commit disabled\n");
   };
   uint64_t offset = addr % 4ULL;
   // commit->addr = addr - offset;
