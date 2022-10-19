@@ -106,9 +106,11 @@ warning: ‘vaddr_read_cross_page’ defined but not used
 在执行了 `nemu_trap: 0x80000000` 这条指令或者 `syscall 0x11` 之后，`NEMU` 会停止执行并判断当前保存返回值的 `a0` 寄存器内容是否为 0 ，是则显示 `HIT GOOD TRAP` 否则显示 `HIT BAD TRAP`。显示 `HIT BAD TRAP`不代表一定错误地执行了程序。
 
 ## **对配置文件的说明**
-与 `LA32R` 相关的配置文件有两个：`la32-reduced_defconfig` 和 `la32-reduced-ref_defconfig`， 位于 `NEMU/configs` 中。前者用于编译产生可执行文件，后者用于编译产生动态链接库。请不要随意修改两者的内容。
+与 `LA32R` 相关的配置文件有两个：`la32-reduced_defconfig` 和 `la32-reduced-ref_defconfig`， 位于 `NEMU/configs` 中。前者用于编译产生可执行文件，后者用于编译产生动态链接库。由于并未对配置文件中的所有设置进行组合测试，所以建议尽量不要尝试任意的配置。
 
-如果你需要配置 `TLB` 表项的数目，可以在配置文件中找到并修改 `CONFIG_TLB_ENTRIES` 一项。如果超过32项，就需要再修改 `CSR` 寄存器 `TLBIDX` 的 `index` 位域的宽度以及 `TLBIDX_W_MASK` 了。
+如果你需要配置 `TLB` 表项的数目，可以在配置文件中找到并修改 `CONFIG_TLB_ENTRIES` 一项。如果超过32项，就需要再修改 `CSR` 寄存器 `TLBIDX` 的 `index` 位域的宽度(`src/isa/la32r/local-include/csr.h`)以及 `TLBIDX_W_MASK` (`src/isa/la32r/system/csr_mask.h`)了。
+
+手册中允许物理地址宽度为32至36的实现，在配置文件中你也可以修改 `CONFIG_PALEN` 一项，但实际上本模拟器目前只支持32位的物理地址（`paddr`是`uint_32`类型），修改 `CONFIG_PALEN` 一项只会影响 `tlbelo0` 和 `tlbelo1` 的 `PPN` 域的位宽。
 
 ## 其他
 * 《龙芯架构32位精简版参考手册》可以从龙芯官网下载。https://www.loongson.cn/FileShow

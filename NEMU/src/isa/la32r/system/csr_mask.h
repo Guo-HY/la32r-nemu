@@ -43,12 +43,12 @@
 // 2
 #define LLBCTL_WCLLB_MASK   0x00000002 
 // 1
-#define TLBIDX_W_MASK       0xbf00001f
+#define TLBIDX_W_MASK       0xbf00001f     // modify this when you need to change TLB entries
 // 0 ~ 4, 24 ~ 29, 31
 #define TLBEHI_W_MASK       0xffffe000
 // 13 ~ 31
-#define TLBELO_W_MASK       0xffffff7f
-// 0 ~ 6, 8 ~ 31
+#define TLBELO_W_MASK       (0xffffff7f) & (uint32_t)(~((uint64_t)(-1) << ((CONFIG_PALEN-12)+8)))
+// 0 ~ 6, 8 ~ (PALEN-5)
 #define ASID_W_MASK         0x000003ff
 // 0 ~ 9
 #define PGDL_W_MASK         0xfffff000

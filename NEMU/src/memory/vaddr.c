@@ -28,35 +28,35 @@
 
 #ifndef __ICS_EXPORT
 #ifndef ENABLE_HOSTTLB
-static word_t vaddr_read_cross_page(vaddr_t addr, int len, int type) {
-  word_t data = 0;
-  int i;
-  for (i = 0; i < len; i ++, addr ++) {
-    paddr_t mmu_ret = isa_mmu_translate(addr, 1, type);
-    int ret = mmu_ret & PAGE_MASK;
-    if (ret != MEM_RET_OK) return 0;
-    paddr_t paddr = (mmu_ret & ~PAGE_MASK) | (addr & PAGE_MASK);
-#ifdef CONFIG_MULTICORE_DIFF
-    word_t byte = (type == MEM_TYPE_IFETCH ? golden_pmem_read : paddr_read)(paddr, 1);
-#else
-    word_t byte = (type == MEM_TYPE_IFETCH ? paddr_read : paddr_read)(paddr, 1);
-#endif
-    data |= byte << (i << 3);
-  }
-  return data;
-}
+// static word_t vaddr_read_cross_page(vaddr_t addr, int len, int type) {
+//   word_t data = 0;
+//   int i;
+//   for (i = 0; i < len; i ++, addr ++) {
+//     paddr_t mmu_ret = isa_mmu_translate(addr, 1, type);
+//     int ret = mmu_ret & PAGE_MASK;
+//     if (ret != MEM_RET_OK) return 0;
+//     paddr_t paddr = (mmu_ret & ~PAGE_MASK) | (addr & PAGE_MASK);
+// #ifdef CONFIG_MULTICORE_DIFF
+//     word_t byte = (type == MEM_TYPE_IFETCH ? golden_pmem_read : paddr_read)(paddr, 1);
+// #else
+//     word_t byte = (type == MEM_TYPE_IFETCH ? paddr_read : paddr_read)(paddr, 1);
+// #endif
+//     data |= byte << (i << 3);
+//   }
+//   return data;
+// }
 
-static void vaddr_write_cross_page(vaddr_t addr, int len, word_t data) {
-  int i;
-  for (i = 0; i < len; i ++, addr ++) {
-    paddr_t mmu_ret = isa_mmu_translate(addr, 1, MEM_TYPE_WRITE);
-    int ret = mmu_ret & PAGE_MASK;
-    if (ret != MEM_RET_OK) return;
-    paddr_t paddr = (mmu_ret & ~PAGE_MASK) | (addr & PAGE_MASK);
-    paddr_write(paddr, 1, data & 0xff);
-    data >>= 8;
-  }
-}
+// static void vaddr_write_cross_page(vaddr_t addr, int len, word_t data) {
+//   int i;
+//   for (i = 0; i < len; i ++, addr ++) {
+//     paddr_t mmu_ret = isa_mmu_translate(addr, 1, MEM_TYPE_WRITE);
+//     int ret = mmu_ret & PAGE_MASK;
+//     if (ret != MEM_RET_OK) return;
+//     paddr_t paddr = (mmu_ret & ~PAGE_MASK) | (addr & PAGE_MASK);
+//     paddr_write(paddr, 1, data & 0xff);
+//     data >>= 8;
+//   }
+// }
 
 __attribute__((noinline))
 static word_t vaddr_mmu_read(struct Decode *s, vaddr_t addr, int len, int type) {

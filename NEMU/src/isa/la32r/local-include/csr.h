@@ -109,7 +109,7 @@ CSR_STRUCT_START(LLBCTL)
 CSR_STRUCT_END(LLBCTL)
 
 CSR_STRUCT_START(TLBIDX)
-  uint32_t index    : 5;
+  uint32_t index    : 5;    // modify this when you need to change TLB entries
   uint32_t pad0     : 19;
   uint32_t ps       : 6;
   uint32_t pad1     : 1;
