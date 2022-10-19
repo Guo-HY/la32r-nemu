@@ -18,7 +18,6 @@
 #include "local-include/csr.h"
 #include "local-include/mmu.h"
 #include "local-include/intr.h"
-#include "system/csr_mask.h"
 
 //load some inst for test
 static const uint32_t img [] = {
@@ -43,12 +42,6 @@ void init_isa() {
   printf("[NEMU] ####### INIT HERE ########\n");
   printf("[NEMU] TLB_ENTRY = %d\n",CONFIG_TLB_ENTRIES);
   printf("[NEMU] PALEN = %d\n",CONFIG_PALEN);
-  printf("PALEN MASK = 0x%08x\n", TLBELO_W_MASK);
-  // if(CONFIG_PALEN_32)
-  //   printf("[NEMU] PALEN = 32\n");
-  // else 
-  //   printf("[NEMU] PALEN = 36\n");
-  // MUXDEF(CONFIG_PALEN_32, printf("[NEMU] PALEN = 32\n");, printf("[NEMU] PALEN = 36\n"););
   
   init_csr();
 
