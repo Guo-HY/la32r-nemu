@@ -23,11 +23,18 @@
 #include "../local-include/mmu.h"
 
 struct tlb_struct tlb [CONFIG_TLB_ENTRIES];
+struct tlb_struct l0_tlb [2];
+int l0_tlb_index [2];
+int last_hit = 0;
 
 void init_mmu() {
   int i;
   for (i = 0; i < CONFIG_TLB_ENTRIES; i ++) {
     tlb[i].hi.E = tlb[i].lo[0].V = tlb[i].lo[1].V = 0;
+  }
+  for (i = 0; i < 2; i ++) {
+    l0_tlb[i].hi.E = l0_tlb[i].lo[0].V = l0_tlb[i].lo[1].V = 0;
+    l0_tlb_index[i] = 0;
   }
 }
 
@@ -58,10 +65,18 @@ static inline void update_tlb(uint32_t idx) {
 
 void tlbwr(){
   update_tlb(TLBIDX->index);
+  for (int i = 0; i < 2; i ++) {
+    l0_tlb[i].hi.E = l0_tlb[i].lo[0].V = l0_tlb[i].lo[1].V = 0;
+    l0_tlb_index[i] = 0;
+  }
 }
 
 void tlbfill(uint32_t idx){
   update_tlb(idx);
+  for (int i = 0; i < 2; i ++) {
+    l0_tlb[i].hi.E = l0_tlb[i].lo[0].V = l0_tlb[i].lo[1].V = 0;
+    l0_tlb_index[i] = 0;
+  }
 }
 
 int tlbsrch(){
@@ -139,6 +154,10 @@ void tlbrd(){
 
 void invtlb(uint32_t op, uint32_t asid, uint32_t va){
   int i = 0;
+  for (i = 0; i < 2; i ++) {
+    l0_tlb[i].hi.E = l0_tlb[i].lo[0].V = l0_tlb[i].lo[1].V = 0;
+    l0_tlb_index[i] = 0;
+  }
   switch (op)
   {
   case 0x0:
@@ -239,21 +258,46 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
       } 
 
       int i = 0;
-      for(i = 0; i<CONFIG_TLB_ENTRIES; i++){
-        if((tlb[i].hi.E == 1) && ((tlb[i].hi.G == 1) || (tlb[i].hi.ASID == ASID->asid))){
-          if(tlb[i].hi.PS == 12){
-            if((vaddr >> 13) == tlb[i].hi.VPPN){
-              matched_tlb_index = i;
+      int l0_hit = 0;
+      for(i = 0; i<2; i++){
+        if((l0_tlb[i].hi.E == 1) && ((l0_tlb[i].hi.G == 1) || (l0_tlb[i].hi.ASID == ASID->asid))){
+          if(l0_tlb[i].hi.PS == 12){
+            if((vaddr >> 13) == l0_tlb[i].hi.VPPN){
+              matched_tlb_index = l0_tlb_index[i];
               even_or_odd = (vaddr >> 12)%2;
               match_tlb ++;
+              last_hit = i;
             }
           }
-          else if(tlb[i].hi.PS == 21){
-            if((vaddr >> 22) == (tlb[i].hi.VPPN >> 9)){
-              matched_tlb_index = i;
+          else if(l0_tlb[i].hi.PS == 21){
+            if((vaddr >> 22) == (l0_tlb[i].hi.VPPN >> 9)){
+              matched_tlb_index = l0_tlb_index[i];
               even_or_odd = (vaddr >> 21)%2;
               match_tlb ++;
+              last_hit = i;
             }        
+          }
+        }
+      }
+      l0_hit = match_tlb;
+      
+      if(match_tlb==0){
+        for(i = 0; i<CONFIG_TLB_ENTRIES; i++){
+          if((tlb[i].hi.E == 1) && ((tlb[i].hi.G == 1) || (tlb[i].hi.ASID == ASID->asid))){
+            if(tlb[i].hi.PS == 12){
+              if((vaddr >> 13) == tlb[i].hi.VPPN){
+                matched_tlb_index = i;
+                even_or_odd = (vaddr >> 12)%2;
+                match_tlb ++;
+              }
+            }
+            else if(tlb[i].hi.PS == 21){
+              if((vaddr >> 22) == (tlb[i].hi.VPPN >> 9)){
+                matched_tlb_index = i;
+                even_or_odd = (vaddr >> 21)%2;
+                match_tlb ++;
+              }        
+            }
           }
         }
       }
@@ -296,7 +340,12 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
           TLBEHI->vppn = vaddr >> 13;
           longjmp_exception(EX_PME);          
         }
-    
+
+        if(l0_hit==0){
+          l0_tlb[1-last_hit] = tlb[matched_tlb_index];
+          l0_tlb_index[1-last_hit] = matched_tlb_index;
+        }
+
         if(tlb[matched_tlb_index].hi.PS == 12){
           return (((tlb[matched_tlb_index].lo[even_or_odd].PPN) << 12) | (vaddr & 0x00000fff));
         }else if(tlb[matched_tlb_index].hi.PS == 21){
