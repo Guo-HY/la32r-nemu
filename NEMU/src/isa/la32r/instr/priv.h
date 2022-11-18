@@ -19,6 +19,10 @@
 
 def_EHelper(syscall) {
   // printf("PC: 0x%x [DEBUG]: this is syscall\n",cpu.pc);
+  rtl_li(s, s1, s->pc);
+  rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_SYS);
+  rtl_jr(s, s0);
+
   if(id_src1->imm == 0x11){
     printf("[NEMU] This is syscall 0x11, end\n");
     cosim_end = 1;
@@ -27,11 +31,6 @@ def_EHelper(syscall) {
     save_globals(s);
     rtl_hostcall(s, HOSTCALL_EXIT, NULL, &cpu.gpr[4]._32, NULL, 0); // gpr[4] is $v0
     longjmp_exec(NEMU_EXEC_END);
-    
-  }else{
-    rtl_li(s, s1, s->pc);
-    rtl_hostcall(s, HOSTCALL_TRAP, s0, s1, NULL, EX_SYS);
-    rtl_jr(s, s0);
   }
 }
 

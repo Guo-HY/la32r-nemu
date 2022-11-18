@@ -63,12 +63,6 @@ static inline def_DHelper(r2_i12) {
   decode_op_r(s, id_dest, s->isa.instr.r2_i12.rd, false);
 }
 
-// static inline def_DHelper(r2_i12_u) {
-//   decode_op_r(s, id_src1, s->isa.instr.r2_i12.rj, true);
-//   decode_op_i(s, id_src2, ((s->isa.instr.r2_i12.i12) & (0x00000fff)), true);
-//   decode_op_r(s, id_dest, s->isa.instr.r2_i12.rd, false);
-// }
-
 static inline def_DHelper(r1_i20) {
   decode_op_i(s, id_src1, s->isa.instr.r1_i20.i20 << 12, true);
   decode_op_r(s, id_dest, s->isa.instr.r1_i20.rd, false);
@@ -79,12 +73,6 @@ static inline def_DHelper(r2_i8) {
   decode_op_i(s, id_src2, s->isa.instr.r2_i8.i5, true);
   decode_op_r(s, id_dest, s->isa.instr.r2_i8.rd, false);
 }
-
-// static inline def_DHelper(r2_i14) {
-//   decode_op_i(s, id_src1, s->isa.instr.r2_i14.i14, true);
-//   decode_op_r(s, id_src2, s->isa.instr.r2_i14.rj, true);
-//   decode_op_r(s, id_dest, s->isa.instr.r2_i14.rd, false);
-// }
 
 static inline def_DHelper(r2_i14s) {
   decode_op_i(s, id_src1, s->isa.instr.r2_i14s.i14, false);
@@ -137,10 +125,6 @@ static inline def_DHelper(invtlb) {
   decode_op_i(s, id_dest, s->isa.instr.r3.rd, false);
 }
 
-
-/* use 'IDTAB' like codes written in isa/misp32 cannot pass compile
- * so i use 'def_INSTR_TAB' like codes in isa/riscv64
- */
 
 def_THelper(mem) {
 
@@ -239,14 +223,6 @@ def_THelper(main) {
 
   def_INSTR_IDTAB("0001110 ???????????????????? ?????",pcaddu12i, pcaddu12i);
   def_INSTR_IDTAB("0001010 ???????????????????? ?????",r1_i20, lu12i_w);
-
-
-  // def_INSTR_IDTAB("00100000 ?????????????? ????? ?????",r2_i14s, ll_w);
-  // def_INSTR_IDTAB("00100001 ?????????????? ????? ?????",r2_i14s, sc_w);
-
-  // def_INSTR_IDTAB("010011 ???????????????? ????? ?????",jirl, jirl);
-  // def_INSTR_IDTAB("010100 ???????????????? ??????????",i_26, b);
-  // def_INSTR_IDTAB("010101 ???????????????? ??????????",bl, bl);  
 
   def_INSTR_IDTAB("0000000000100 ???? ????? ????? ?????",r3, divop);
 

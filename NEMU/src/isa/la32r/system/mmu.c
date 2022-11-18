@@ -23,7 +23,7 @@
 #include "../local-include/mmu.h"
 
 struct tlb_struct tlb [CONFIG_TLB_ENTRIES];
-int last_hit_index [2] = {0,1}; // must be two different num
+int last_hit_index [2] = {0,1}; // need be two different num
 int last_hit_replace = 0;
 
 void init_mmu() {

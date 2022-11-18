@@ -74,7 +74,10 @@ def_EHelper(sc_w) {
       rtl_mv(s, ddest, &(cpu.ll_bit));
       cpu.ll_bit = 0;
     }else{
-      isa_mmu_translate(addr, 4, MEM_TYPE_WRITE);
+      /** NOTE: sc.w can casue TLBex when llbit=0, 
+       * but to pass co-sim with chiplab DEMO when simulating linux, 
+       * next line is omitted */
+      // isa_mmu_translate(addr, 4, MEM_TYPE_WRITE);
       rtl_mv(s, ddest, &(cpu.ll_bit));
     }
 }

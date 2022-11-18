@@ -82,18 +82,6 @@ typedef struct {
       int32_t i12     : 12;
       uint32_t opcode : 10;
     } r2_i12; //imm compute, load, store, cacop
-    // struct {
-    //   uint32_t rd     : 5;
-    //   uint32_t rj     : 5;
-    //   uint32_t i12    : 12;
-    //   uint32_t opcode : 10;
-    // } r2_i12_u; // andi ori xori, zero-extend   
-    // struct {
-    //   uint32_t rd     : 5;
-    //   uint32_t rj     : 5;
-    //   uint32_t i14    : 14;
-    //   uint32_t opcode : 8;
-    // } r2_i14; // csr
     struct {
       uint32_t rd     : 5;
       uint32_t rj     : 5;
