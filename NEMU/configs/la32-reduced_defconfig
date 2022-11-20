@@ -26,9 +26,9 @@ CONFIG_CC_GCC=y
 CONFIG_CC="gcc"
 # CONFIG_CC_O0 is not set
 # CONFIG_CC_O1 is not set
-CONFIG_CC_O2=y
-# CONFIG_CC_O3 is not set
-CONFIG_CC_OPT="O2"
+# CONFIG_CC_O2 is not set
+CONFIG_CC_O3=y
+CONFIG_CC_OPT="O3"
 CONFIG_CC_LTO=y
 # CONFIG_CC_DEBUG is not set
 # CONFIG_CC_ASAN is not set
